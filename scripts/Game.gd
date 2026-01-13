@@ -774,5 +774,12 @@ func _play_click_sound(click_pos: Vector2) -> void:
 		var sample := (rumble + crack) * envelope * 0.7
 		playback.push_frame(Vector2(sample, sample))
 
+func _format_compact_cost(cost: int) -> String:
+	if cost < 10000:
+		return "%d" % cost
+	if cost < 1000000:
+		return "%.1fK" % (cost / 1000.0)
+	return "%.2fM" % (cost / 1000000.0)
+
 func _format_cost(cost: int) -> String:
-	return "Coste: %d" % cost
+	return "Coste: %s" % _format_compact_cost(cost)
