@@ -39,8 +39,6 @@ func _physics_process(delta: float) -> void:
 	if _attack_timer >= attack_interval:
 		_attack_timer = 0.0
 		_spawn_fireball(_current_target)
-		if _current_target != null and _current_target.has_method("take_damage"):
-			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
 
 func _is_target_valid(target) -> bool:
@@ -88,6 +86,6 @@ func _spawn_fireball(target) -> void:
 	else:
 		add_child(fireball)
 	if fireball.has_method("launch"):
-		fireball.call("launch", global_position, target)
+		fireball.call("launch", global_position, target, attack_damage)
 	else:
 		fireball.global_position = global_position
