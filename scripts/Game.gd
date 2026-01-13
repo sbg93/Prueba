@@ -4,6 +4,7 @@ const BASE_NEST_COST := 5
 const BASE_GOBLIN_NEST_COST := 20
 const BASE_SOLDIER_COST := 5
 const BASE_MAGE_COST := 20
+const BASE_KNIGHT_COST := 100
 const BASE_CLICK_UPGRADE_COST := 5
 const BASE_RAT_STEROIDS_COST := 5
 const BASE_GOBLIN_STEROIDS_COST := 20
@@ -14,6 +15,7 @@ const NEST_COST_MULTIPLIER := 2
 const GOBLIN_NEST_COST_MULTIPLIER := 3
 const SOLDIER_COST_MULTIPLIER := 2
 const MAGE_COST_MULTIPLIER := 2
+const KNIGHT_COST_MULTIPLIER := 3
 const CLICK_UPGRADE_MULTIPLIER := 2
 const RAT_STEROIDS_MULTIPLIER := 2
 const GOBLIN_STEROIDS_MULTIPLIER := 3
@@ -42,6 +44,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var goblin_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow/GoblinNestBuyButton
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
 @onready var mage_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageBuyButton
+@onready var knight_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
 @onready var goblin_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsButton
@@ -54,6 +57,7 @@ var nest_count := 0
 var goblin_nest_count := 0
 var soldier_count := 0
 var mage_count := 0
+var knight_count := 0
 var click_upgrade_count := 0
 var rat_steroids_count := 0
 var goblin_steroids_count := 0
@@ -79,6 +83,7 @@ var goblin_scene := preload("res://scenes/Goblin.tscn")
 var goblin_nest_scene := preload("res://scenes/GoblinNest.tscn")
 var soldier_scene := preload("res://scenes/Soldier.tscn")
 var mage_scene := preload("res://scenes/Mage.tscn")
+var knight_scene := preload("res://scenes/Knight.tscn")
 
 func _ready() -> void:
 	add_to_group("game")
@@ -90,6 +95,7 @@ func _ready() -> void:
 	goblin_nest_button.pressed.connect(_on_buy_goblin_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
 	mage_button.pressed.connect(_on_buy_mage_pressed)
+	knight_button.pressed.connect(_on_buy_knight_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
 	goblin_steroids_button.pressed.connect(_on_buy_goblin_steroids_pressed)
@@ -191,7 +197,7 @@ func get_random_near_enemy(from_pos: Vector2, candidates_count: int = 3) -> Node
 
 func get_random_near_player_unit(from_pos: Vector2, candidates_count: int = 3) -> Node:
 	var candidates: Array[Dictionary] = []
-	for group_name in ["soldiers", "mages", "nests", "goblin_nests"]:
+	for group_name in ["soldiers", "mages", "knights", "nests", "goblin_nests"]:
 		for unit in get_tree().get_nodes_in_group(group_name):
 			candidates.append({
 				"unit": unit,
@@ -263,6 +269,15 @@ func _on_buy_mage_pressed() -> void:
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde desplegar el mago."
 
+func _on_buy_knight_pressed() -> void:
+	var cost := _get_knight_cost()
+	if gold < cost:
+		return
+	_clear_pending_delete()
+	pending_purchase = "knight"
+	pending_cost = cost
+	placement_label.text = "Selecciona dónde desplegar el caballero."
+
 func _on_buy_click_upgrade_pressed() -> void:
 	var cost := _get_click_upgrade_cost()
 	if gold < cost:
@@ -325,6 +340,9 @@ func _place_pending_purchase(click_pos: Vector2) -> void:
 	elif pending_purchase == "mage":
 		_spawn_mage(click_pos)
 		mage_count += 1
+	elif pending_purchase == "knight":
+		_spawn_knight(click_pos)
+		knight_count += 1
 	_clear_pending_purchase()
 	_update_ui()
 
@@ -349,7 +367,7 @@ func _clear_pending_delete() -> void:
 func _find_deletable_target(click_pos: Vector2) -> Node2D:
 	var closest_target: Node2D = null
 	var closest_distance := DELETE_SELECT_RADIUS
-	for group_name in ["nests", "goblin_nests", "soldiers", "mages"]:
+	for group_name in ["nests", "goblin_nests", "soldiers", "mages", "knights"]:
 		for unit in get_tree().get_nodes_in_group(group_name):
 			if unit is Node2D:
 				var distance := click_pos.distance_to(unit.global_position)
@@ -367,6 +385,8 @@ func _delete_unit(unit: Node2D) -> void:
 		soldier_count = max(soldier_count - 1, 0)
 	elif unit.is_in_group("mages"):
 		mage_count = max(mage_count - 1, 0)
+	elif unit.is_in_group("knights"):
+		knight_count = max(knight_count - 1, 0)
 	unit.queue_free()
 	_update_ui()
 
@@ -400,6 +420,12 @@ func _spawn_mage(spawn_pos: Vector2) -> void:
 		mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
 	playfield.add_child(mage)
 
+func _spawn_knight(spawn_pos: Vector2) -> void:
+	var knight := knight_scene.instantiate()
+	knight.position = spawn_pos
+	knight.game = self
+	playfield.add_child(knight)
+
 func _update_ui() -> void:
 	gold_label.text = "🪙 %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
@@ -407,6 +433,7 @@ func _update_ui() -> void:
 	goblin_nest_button.text = _format_cost(_get_goblin_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
 	mage_button.text = _format_cost(_get_mage_cost())
+	knight_button.text = _format_cost(_get_knight_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
 	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
 	goblin_steroids_button.text = _format_cost(_get_goblin_steroids_cost())
@@ -424,6 +451,9 @@ func _get_soldier_cost() -> int:
 
 func _get_mage_cost() -> int:
 	return int(BASE_MAGE_COST * pow(MAGE_COST_MULTIPLIER, mage_count))
+
+func _get_knight_cost() -> int:
+	return int(BASE_KNIGHT_COST * pow(KNIGHT_COST_MULTIPLIER, knight_count))
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
