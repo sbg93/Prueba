@@ -41,8 +41,13 @@ func _physics_process(delta: float) -> void:
 			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
 
-func _is_target_valid(target: Node2D) -> bool:
-	return target != null and is_instance_valid(target) and target.is_inside_tree()
+func _is_target_valid(target: Object) -> bool:
+	return (
+		target != null
+		and is_instance_valid(target)
+		and target is Node2D
+		and target.is_inside_tree()
+	)
 
 func _play_attack_sound() -> void:
 	if _attack_sound == null or _attack_stream == null:
