@@ -4,6 +4,7 @@ extends Node2D
 @export var attack_damage := 1
 @export var attack_interval := 2.0
 @export var attack_range := 14.0
+@export var whirlwind_radius := 60.0
 
 var game: Node
 var _attack_timer := 0.0
@@ -39,6 +40,8 @@ func _physics_process(delta: float) -> void:
 		_attack_timer = 0.0
 		if _current_target != null and _current_target.has_method("take_damage"):
 			_current_target.take_damage(attack_damage)
+		if _is_torbellino_active():
+			_apply_torbellino_damage(_current_target)
 		_play_attack_sound()
 
 func _is_target_valid(target) -> bool:
@@ -48,6 +51,27 @@ func _is_target_valid(target) -> bool:
 		and target is Node2D
 		and target.is_inside_tree()
 	)
+
+func _apply_torbellino_damage(primary_target: Node2D) -> void:
+	var space_state := get_world_2d().direct_space_state
+	var shape := CircleShape2D.new()
+	shape.radius = whirlwind_radius
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape
+	params.transform = Transform2D(0.0, global_position)
+	params.collide_with_areas = true
+	params.collide_with_bodies = false
+	var hits := space_state.intersect_shape(params, 32)
+	for hit in hits:
+		var collider: Variant = hit.get("collider")
+		if collider == primary_target:
+			continue
+		if collider is Node and collider.is_in_group("enemies"):
+			if collider.has_method("take_damage"):
+				collider.take_damage(attack_damage)
+
+func _is_torbellino_active() -> bool:
+	return game != null and game.has_method("is_torbellino_unlocked") and game.is_torbellino_unlocked()
 
 func _play_attack_sound() -> void:
 	if _attack_sound == null or _attack_stream == null:
