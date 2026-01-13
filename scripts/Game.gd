@@ -38,6 +38,8 @@ const BASE_KNIGHT_SPEED := 220.0
 const MAGE_RANGE_MULTIPLIER_PER_UPGRADE := 1.10
 const KNIGHT_SIZE_MULTIPLIER_PER_UPGRADE := 1.10
 const DELETE_SELECT_RADIUS := 26.0
+const BASE_SKILL_POINT_GOAL := 10000
+const SKILL_POINT_GOAL_MULTIPLIER := 2
 
 @export var playfield_rect := Rect2()
 
@@ -45,6 +47,8 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var playfield: Node2D = $Playfield
 @onready var gold_label: Label = $HUD/UIRoot/TopBar/TopBarContent/GoldLabel
 @onready var click_damage_label: Label = $HUD/UIRoot/TopBar/TopBarContent/ClickDamageLabel
+@onready var skill_progress_bar: ProgressBar = $HUD/UIRoot/TopBar/TopBarContent/SkillProgressContainer/SkillProgressBar
+@onready var skill_points_label: Label = $HUD/UIRoot/TopBar/TopBarContent/SkillProgressContainer/SkillPointsLabel
 @onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
 @onready var trash_button: Button = $HUD/UIRoot/TopBar/TopBarContent/TrashButton
 @onready var menu_button: Button = $HUD/UIRoot/TopBar/TopBarContent/MenuButton
@@ -90,7 +94,11 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var torbellino_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoButton
 
 var gold := 100000000
+var total_gold_earned := 0
 var click_damage := 1
+var skill_points := 0
+var skill_point_goal := BASE_SKILL_POINT_GOAL
+var gold_since_last_skill_point := 0
 var nest_count := 0
 var goblin_nest_count := 0
 var soldier_count := 0
@@ -322,9 +330,12 @@ func _on_enemy_died(gold_value: int, enemy_kind: String, killed_by_click: bool) 
 	else:
 		base_gain += rat_gold_bonus
 	if killed_by_click:
-		gold += int(round(base_gain * click_kill_gold_multiplier))
+		var gain := int(round(base_gain * click_kill_gold_multiplier))
+		gold += gain
+		_register_gold_earned(gain)
 	else:
 		gold += base_gain
+		_register_gold_earned(base_gain)
 	_update_ui()
 
 func _on_purchases_tab_pressed() -> void:
@@ -609,6 +620,10 @@ func _spawn_knight(spawn_pos: Vector2) -> void:
 func _update_ui() -> void:
 	gold_label.text = "🪙 %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
+	skill_points_label.text = str(skill_points)
+	skill_progress_bar.max_value = skill_point_goal
+	skill_progress_bar.value = min(gold_since_last_skill_point, skill_point_goal)
+	skill_progress_bar.tooltip_text = "%d / %d" % [total_gold_earned, skill_point_goal]
 	rat_nest_count_label.text = str(nest_count)
 	goblin_nest_count_label.text = str(goblin_nest_count)
 	soldier_count_label.text = str(soldier_count)
@@ -645,6 +660,16 @@ func _update_ui() -> void:
 	torbellino_button.text = "-" if torbellino_purchased else _format_cost(BASE_TORBELLINO_COST)
 	hand_of_god_row.visible = click_upgrade_count >= 5 or hand_of_god_count > 0
 	knight_anabolizantes_row.visible = knight_steroids_count >= 5 or knight_anabolizantes_count > 0
+
+func _register_gold_earned(amount: int) -> void:
+	if amount <= 0:
+		return
+	total_gold_earned += amount
+	gold_since_last_skill_point += amount
+	while gold_since_last_skill_point >= skill_point_goal:
+		gold_since_last_skill_point -= skill_point_goal
+		skill_points += 1
+		skill_point_goal *= SKILL_POINT_GOAL_MULTIPLIER
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
