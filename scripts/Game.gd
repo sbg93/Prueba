@@ -584,7 +584,10 @@ func _spawn_knight(spawn_pos: Vector2) -> void:
 	knight.game = self
 	if "speed" in knight:
 		knight.speed = BASE_KNIGHT_SPEED * knight_speed_multiplier
-	knight.scale = Vector2.ONE * knight_size_multiplier
+	if knight.has_method("apply_size_multiplier"):
+		knight.apply_size_multiplier(knight_size_multiplier)
+	else:
+		knight.scale = Vector2.ONE * knight_size_multiplier
 	playfield.add_child(knight)
 
 func _update_ui() -> void:
@@ -696,7 +699,10 @@ func _update_knight_speed() -> void:
 
 func _update_knight_size() -> void:
 	for knight in get_tree().get_nodes_in_group("knights"):
-		knight.scale = Vector2.ONE * knight_size_multiplier
+		if knight.has_method("apply_size_multiplier"):
+			knight.apply_size_multiplier(knight_size_multiplier)
+		else:
+			knight.scale = Vector2.ONE * knight_size_multiplier
 
 func is_double_fireball_unlocked() -> bool:
 	return double_fireball_purchased
