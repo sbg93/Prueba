@@ -9,7 +9,7 @@ var game: Node
 var _attack_timer := 0.0
 var _attack_sound: AudioStreamPlayer2D
 var _attack_stream: AudioStreamGenerator
-var _current_target: Node2D
+var _current_target
 
 func _ready() -> void:
 	add_to_group("soldiers")
