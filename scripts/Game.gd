@@ -31,7 +31,7 @@ const BASE_SOLDIER_DAMAGE := 1
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
 
-var gold := 10
+var gold := 1000
 var click_damage := 1
 var nest_count := 0
 var soldier_count := 0
@@ -118,7 +118,7 @@ func get_random_near_rat(from_pos: Vector2, candidates_count: int = 3) -> Node:
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return a["distance"] < b["distance"]
 	)
-	var max_candidates := min(candidates_count, candidates.size())
+	var max_candidates : Variant = min(candidates_count, candidates.size())
 	var choice_index := randi_range(0, max_candidates - 1)
 	return candidates[choice_index]["rat"]
 

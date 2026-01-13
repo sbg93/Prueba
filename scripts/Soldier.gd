@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
 
-func _is_target_valid(target: Object) -> bool:
+func _is_target_valid(target) -> bool:
 	return (
 		target != null
 		and is_instance_valid(target)
