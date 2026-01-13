@@ -81,7 +81,7 @@ text = "Nido de ratas"
 
 [node name="RatNestBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
-text = "Comprar (5)"
+text = "5"
 
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
@@ -93,7 +93,7 @@ text = "Soldado"
 
 [node name="SoldierBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
-text = "Comprar (5)"
+text = "5"
 
 [node name="UpgradesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
 layout_mode = 2
@@ -109,4 +109,4 @@ text = "Mejora de click"
 
 [node name="ClickUpgradeButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
-text = "Comprar (5)"
+text = "5"
