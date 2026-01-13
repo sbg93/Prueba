@@ -12,6 +12,7 @@ const BASE_SOLDIER_STEROIDS_COST := 5
 const BASE_MAGE_STEROIDS_COST := 20
 const BASE_KNIGHT_STEROIDS_COST := 50
 const BASE_DOUBLE_FIREBALL_COST := 100
+const BASE_TORBELLINO_COST := 100
 
 const NEST_COST_MULTIPLIER := 2
 const GOBLIN_NEST_COST_MULTIPLIER := 3
@@ -70,6 +71,9 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var double_fireball_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow
 @onready var double_fireball_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballCountLabel
 @onready var double_fireball_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballButton
+@onready var torbellino_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow
+@onready var torbellino_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoCountLabel
+@onready var torbellino_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoButton
 
 var gold := 1000
 var click_damage := 1
@@ -91,6 +95,7 @@ var mage_damage_bonus := 0
 var mage_range_bonus := 0.0
 var knight_speed_multiplier := 1.0
 var double_fireball_purchased := false
+var torbellino_purchased := false
 
 var pending_purchase := ""
 var pending_cost := 0
@@ -127,6 +132,7 @@ func _ready() -> void:
 	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
 	knight_steroids_button.pressed.connect(_on_buy_knight_steroids_pressed)
 	double_fireball_button.pressed.connect(_on_buy_double_fireball_pressed)
+	torbellino_button.pressed.connect(_on_buy_torbellino_pressed)
 	_click_stream = AudioStreamGenerator.new()
 	_click_stream.mix_rate = 44100
 	_click_stream.buffer_length = 0.4
@@ -416,6 +422,16 @@ func _on_buy_double_fireball_pressed() -> void:
 	double_fireball_purchased = true
 	_update_ui()
 
+func _on_buy_torbellino_pressed() -> void:
+	if torbellino_purchased:
+		return
+	var cost := BASE_TORBELLINO_COST
+	if gold < cost:
+		return
+	gold -= cost
+	torbellino_purchased = true
+	_update_ui()
+
 func _place_pending_purchase(click_pos: Vector2) -> void:
 	gold -= pending_cost
 	if pending_purchase == "nest":
@@ -533,6 +549,7 @@ func _update_ui() -> void:
 	mage_steroids_count_label.text = str(mage_steroids_count)
 	knight_steroids_count_label.text = str(knight_steroids_count)
 	double_fireball_count_label.text = "1" if double_fireball_purchased else "0"
+	torbellino_count_label.text = "1" if torbellino_purchased else "0"
 	rat_nest_button.text = _format_cost(_get_nest_cost())
 	goblin_nest_button.text = _format_cost(_get_goblin_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
@@ -547,6 +564,9 @@ func _update_ui() -> void:
 	double_fireball_row.visible = mage_steroids_count >= 5 or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
+	torbellino_row.visible = soldier_steroids_count >= 5 or torbellino_purchased
+	torbellino_button.disabled = torbellino_purchased
+	torbellino_button.text = "-" if torbellino_purchased else _format_cost(BASE_TORBELLINO_COST)
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
@@ -600,6 +620,9 @@ func _update_knight_speed() -> void:
 
 func is_double_fireball_unlocked() -> bool:
 	return double_fireball_purchased
+
+func is_torbellino_unlocked() -> bool:
+	return torbellino_purchased
 
 func _play_click_sound(click_pos: Vector2) -> void:
 	if _click_sound == null or _click_stream == null:

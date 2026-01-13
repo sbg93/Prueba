@@ -4,6 +4,7 @@ extends Node2D
 @export var attack_damage := 5
 @export var attack_interval := 3.0
 @export var hit_radius := 24.0
+@export var whirlwind_radius := 60.0
 
 var game: Node
 var _attack_timer := 0.0
@@ -90,6 +91,34 @@ func _apply_charge_damage() -> void:
 			if collider.has_method("take_damage"):
 				collider.take_damage(attack_damage)
 			_play_hit_sound()
+			if _is_torbellino_active():
+				_apply_torbellino_damage()
+
+func _apply_torbellino_damage() -> void:
+	var space_state := get_world_2d().direct_space_state
+	var shape := CircleShape2D.new()
+	shape.radius = whirlwind_radius
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape
+	params.transform = Transform2D(0.0, global_position)
+	params.collide_with_areas = true
+	params.collide_with_bodies = false
+	var hits := space_state.intersect_shape(params, 32)
+	var applied := false
+	for hit in hits:
+		var collider : Variant = hit.get("collider")
+		if collider is Node and collider.is_in_group("enemies"):
+			if _hit_targets.has(collider):
+				continue
+			_hit_targets.append(collider)
+			if collider.has_method("take_damage"):
+				collider.take_damage(attack_damage)
+			applied = true
+	if applied:
+		_play_hit_sound()
+
+func _is_torbellino_active() -> bool:
+	return game != null and game.has_method("is_torbellino_unlocked") and game.is_torbellino_unlocked()
 
 func _get_wall_hit_point(origin: Vector2, direction: Vector2) -> Vector2:
 	if game == null or not ("playfield_rect" in game):

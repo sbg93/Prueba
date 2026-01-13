@@ -551,6 +551,37 @@ theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 text = "50"
 
+[node name="TorbellinoRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
+visible = false
+layout_mode = 2
+
+[node name="TorbellinoCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="TorbellinoLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Los caballeros dañan a todos los enemigos a su alrededor al atacar."
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Torbellino"
+
+[node name="TorbellinoButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow"]
+layout_mode = 2
+tooltip_text = "Los caballeros dañan a todos los enemigos a su alrededor al atacar."
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "100"
+
 [node name="DoubleFireballRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 visible = false
 layout_mode = 2
