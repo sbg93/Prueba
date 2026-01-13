@@ -219,6 +219,14 @@ size_flags_vertical = 3
 [node name="RatNestRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
+[node name="RatNestCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="RatNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -238,6 +246,14 @@ text = "5"
 
 [node name="GoblinNestRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
+
+[node name="GoblinNestCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
 
 [node name="GoblinNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
 layout_mode = 2
@@ -259,6 +275,14 @@ text = "20"
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
+[node name="SoldierCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="SoldierLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -279,6 +303,14 @@ text = "5"
 [node name="MageRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
+[node name="MageCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="MageLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -298,6 +330,14 @@ text = "20"
 
 [node name="KnightRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
+
+[node name="KnightCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
 
 [node name="KnightLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow"]
 layout_mode = 2
@@ -323,6 +363,14 @@ size_flags_vertical = 3
 [node name="ClickUpgradeRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
+[node name="ClickUpgradeCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="ClickUpgradeLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -342,6 +390,14 @@ text = "5"
 
 [node name="RatSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
+
+[node name="RatSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
 
 [node name="RatSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
 layout_mode = 2
@@ -363,6 +419,14 @@ text = "5"
 [node name="GoblinSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
+[node name="GoblinSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="GoblinSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -383,6 +447,14 @@ text = "20"
 [node name="SoldierSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
+[node name="SoldierSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
 [node name="SoldierSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -402,6 +474,14 @@ text = "5"
 
 [node name="MageSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
+
+[node name="MageSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
 
 [node name="MageSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
