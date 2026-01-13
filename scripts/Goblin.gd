@@ -46,7 +46,7 @@ func take_damage(amount: int) -> void:
 func _get_flee_direction() -> Vector2:
 	if game == null:
 		return Vector2.ZERO
-	var target := game.get_random_near_player_unit(global_position)
+	var target : Node = game.get_random_near_player_unit(global_position)
 	if target == null:
 		return Vector2.ZERO
 	var target_pos: Vector2 = target.global_position
