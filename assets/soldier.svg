@@ -1,20 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="#000000" opacity="0"/>
-  <rect x="20" y="8" width="24" height="4" fill="#3b3f4a"/>
-  <rect x="16" y="12" width="32" height="4" fill="#3b3f4a"/>
-  <rect x="16" y="16" width="32" height="4" fill="#4c5160"/>
-  <rect x="20" y="20" width="24" height="4" fill="#4c5160"/>
-  <rect x="24" y="24" width="16" height="4" fill="#e3c4a8"/>
-  <rect x="22" y="28" width="20" height="4" fill="#e3c4a8"/>
-  <rect x="20" y="32" width="24" height="4" fill="#2f6bbd"/>
-  <rect x="16" y="36" width="32" height="4" fill="#2f6bbd"/>
-  <rect x="18" y="40" width="28" height="4" fill="#3a78cf"/>
-  <rect x="20" y="44" width="24" height="4" fill="#3a78cf"/>
-  <rect x="18" y="48" width="12" height="4" fill="#2b2d33"/>
-  <rect x="34" y="48" width="12" height="4" fill="#2b2d33"/>
-  <rect x="18" y="52" width="12" height="4" fill="#444a58"/>
-  <rect x="34" y="52" width="12" height="4" fill="#444a58"/>
-  <rect x="26" y="32" width="4" height="4" fill="#1c1f26"/>
-  <rect x="34" y="32" width="4" height="4" fill="#1c1f26"/>
-  <rect x="30" y="36" width="4" height="4" fill="#1c1f26"/>
+  <!-- Helmet -->
+  <rect x="20" y="6" width="24" height="4" fill="#2b2f3a"/>
+  <rect x="18" y="10" width="28" height="4" fill="#3b414f"/>
+  <rect x="18" y="14" width="28" height="4" fill="#4b5261"/>
+  <rect x="20" y="18" width="24" height="4" fill="#4b5261"/>
+  <rect x="22" y="22" width="20" height="4" fill="#d9b99c"/>
+  <rect x="24" y="26" width="16" height="4" fill="#d9b99c"/>
+  <rect x="28" y="20" width="8" height="2" fill="#1c1f26"/>
+
+  <!-- Shoulders and chest armor -->
+  <rect x="16" y="30" width="32" height="4" fill="#5b6475"/>
+  <rect x="14" y="34" width="36" height="4" fill="#6a7385"/>
+  <rect x="16" y="38" width="32" height="4" fill="#7a8396"/>
+  <rect x="20" y="42" width="24" height="4" fill="#6a7385"/>
+  <rect x="28" y="34" width="8" height="8" fill="#2f3542"/>
+  <rect x="30" y="38" width="4" height="4" fill="#9aa3b5"/>
+
+  <!-- Belt -->
+  <rect x="20" y="46" width="24" height="4" fill="#3a3f4c"/>
+  <rect x="30" y="46" width="4" height="4" fill="#d2b36a"/>
+
+  <!-- Legs -->
+  <rect x="20" y="50" width="10" height="6" fill="#2c303b"/>
+  <rect x="34" y="50" width="10" height="6" fill="#2c303b"/>
+  <rect x="20" y="56" width="10" height="4" fill="#4b5261"/>
+  <rect x="34" y="56" width="10" height="4" fill="#4b5261"/>
+
+  <!-- Sword -->
+  <rect x="46" y="26" width="2" height="18" fill="#c7cdd6"/>
+  <rect x="45" y="24" width="4" height="2" fill="#9aa3b5"/>
+  <rect x="44" y="42" width="6" height="2" fill="#6a7385"/>
+  <rect x="45" y="44" width="4" height="2" fill="#8b5a2b"/>
+  <rect x="45" y="46" width="4" height="2" fill="#6a3f1e"/>
+
+  <!-- Arm holding sword -->
+  <rect x="12" y="38" width="4" height="8" fill="#5b6475"/>
+  <rect x="48" y="34" width="4" height="10" fill="#5b6475"/>
 </svg>
