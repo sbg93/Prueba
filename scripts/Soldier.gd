@@ -9,6 +9,7 @@ var game: Node
 var _attack_timer := 0.0
 var _attack_sound: AudioStreamPlayer2D
 var _attack_stream: AudioStreamGenerator
+var _current_target: Node2D
 
 func _ready() -> void:
 	add_to_group("soldiers")
@@ -24,10 +25,11 @@ func _physics_process(delta: float) -> void:
 	_attack_timer += delta
 	if game == null:
 		return
-	var target: Node2D = game.get_random_near_rat(global_position) as Node2D
-	if target == null:
+	if not _is_target_valid(_current_target):
+		_current_target = game.get_random_near_rat(global_position) as Node2D
+	if _current_target == null:
 		return
-	var target_pos: Vector2 = target.global_position
+	var target_pos: Vector2 = _current_target.global_position
 	var distance := global_position.distance_to(target_pos)
 	if distance > attack_range:
 		var direction: Vector2 = (target_pos - global_position).normalized()
@@ -35,9 +37,12 @@ func _physics_process(delta: float) -> void:
 		return
 	if _attack_timer >= attack_interval:
 		_attack_timer = 0.0
-		if target.has_method("take_damage"):
-			target.take_damage(attack_damage)
+		if _current_target != null and _current_target.has_method("take_damage"):
+			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
+
+func _is_target_valid(target: Node2D) -> bool:
+	return target != null and is_instance_valid(target) and target.is_inside_tree()
 
 func _play_attack_sound() -> void:
 	if _attack_sound == null or _attack_stream == null:
