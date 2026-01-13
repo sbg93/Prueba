@@ -12,13 +12,13 @@ func _physics_process(delta: float) -> void:
 	_attack_timer += delta
 	if game == null:
 		return
-	var target := game.get_nearest_rat(global_position)
+	var target: Node2D = game.get_nearest_rat(global_position) as Node2D
 	if target == null:
 		return
-	var target_pos := target.global_position
+	var target_pos: Vector2 = target.global_position
 	var distance := global_position.distance_to(target_pos)
 	if distance > attack_range:
-		var direction := (target_pos - global_position).normalized()
+		var direction: Vector2 = (target_pos - global_position).normalized()
 		global_position += direction * speed * delta
 		return
 	if _attack_timer >= attack_interval:
