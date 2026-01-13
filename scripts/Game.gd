@@ -49,15 +49,19 @@ func _ready() -> void:
 	_show_purchases()
 
 func _input(event: InputEvent) -> void:
-	if pending_purchase.is_empty():
-		return
 	if event is InputEventMouseButton and event.pressed:
+		var click_pos := get_viewport().get_mouse_position()
+		if event.button_index == MOUSE_BUTTON_LEFT and pending_purchase.is_empty():
+			if playfield_rect.has_point(click_pos):
+				_apply_click_damage_at(click_pos)
+			return
+		if pending_purchase.is_empty():
+			return
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			_clear_pending_purchase()
 			return
 		if event.button_index != MOUSE_BUTTON_LEFT:
 			return
-		var click_pos := get_viewport().get_mouse_position()
 		if not playfield_rect.has_point(click_pos):
 			return
 		_place_pending_purchase(click_pos)
@@ -65,6 +69,18 @@ func _input(event: InputEvent) -> void:
 func apply_click_damage(rat: Node) -> void:
 	if rat.has_method("take_damage"):
 		rat.take_damage(click_damage)
+
+func _apply_click_damage_at(click_pos: Vector2) -> void:
+	var space_state := get_world_2d().direct_space_state
+	var params := PhysicsPointQueryParameters2D.new()
+	params.position = click_pos
+	params.collide_with_areas = true
+	var hits := space_state.intersect_point(params, 32)
+	for hit in hits:
+		var collider := hit.get("collider")
+		if collider is Node and collider.is_in_group("rats"):
+			apply_click_damage(collider)
+			return
 
 func spawn_rat_at_position(spawn_pos: Vector2) -> Node:
 	var rat := rat_scene.instantiate()
