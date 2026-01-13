@@ -4,7 +4,7 @@ extends Node2D
 @export var attack_damage := 5
 @export var attack_interval := 3.0
 @export var hit_radius := 24.0
-@export var whirlwind_radius := 60.0
+@export var whirlwind_radius := 120.0
 
 var game: Node
 var _attack_timer := 0.0
