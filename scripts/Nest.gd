@@ -33,5 +33,5 @@ func _spawn_rat() -> void:
 		_active_rats += 1
 		rat.died.connect(_on_rat_died)
 
-func _on_rat_died(_gold_value: int) -> void:
+func _on_rat_died(_gold_value: int, _enemy_kind: String) -> void:
 	_active_rats = max(_active_rats - 1, 0)
