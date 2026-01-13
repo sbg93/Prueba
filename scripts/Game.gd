@@ -66,12 +66,13 @@ func apply_click_damage(rat: Node) -> void:
 	if rat.has_method("take_damage"):
 		rat.take_damage(click_damage)
 
-func spawn_rat_at_position(spawn_pos: Vector2) -> void:
+func spawn_rat_at_position(spawn_pos: Vector2) -> Node:
 	var rat := rat_scene.instantiate()
 	rat.position = spawn_pos
 	rat.game = self
 	playfield.add_child(rat)
 	rat.died.connect(_on_rat_died)
+	return rat
 
 func get_nearest_rat(from_pos: Vector2) -> Node:
 	var rats := get_tree().get_nodes_in_group("rats")
