@@ -1,11 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://wyvqlr8vokud"]
+[gd_scene load_steps=16 format=3 uid="uid://wyvqlr8vokud"]
 
 [ext_resource type="Script" uid="uid://cke0l5f01oc54" path="res://scripts/Game.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dac25wepucqda" path="res://assets/background.png" id="2_rvslj"]
-[ext_resource type="Texture2D" uid="uid://c64t1l1w7ne2f" path="res://assets/wizard_hat.svg" id="3_wizard_hat"]
-[ext_resource type="Texture2D" uid="uid://b4k4o6obq7yxh" path="res://assets/horse.svg" id="4_horse"]
-[ext_resource type="Texture2D" uid="uid://c2j0m6b32fh3o" path="res://assets/hand_white.svg" id="5_hand"]
-[ext_resource type="Texture2D" uid="uid://d8xf04l8uq3ou" path="res://assets/swirl.svg" id="6_swirl"]
+[ext_resource type="Texture2D" uid="uid://ifyuace62ch7" path="res://assets/wizard_hat.svg" id="3_wizard_hat"]
+[ext_resource type="Texture2D" uid="uid://cly87dbn0yuv4" path="res://assets/horse.svg" id="4_horse"]
+[ext_resource type="Texture2D" uid="uid://3spqduhppmsl" path="res://assets/hand_white.svg" id="5_hand"]
+[ext_resource type="Texture2D" uid="uid://blvadd5l2rs57" path="res://assets/swirl.svg" id="6_swirl"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0.09, 0.1, 0.14, 0.95)
@@ -36,18 +36,6 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="9"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.2, 0.22, 0.3, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="8"]
 bg_color = Color(0.72, 0.35, 0.78, 1)
@@ -124,6 +112,18 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="9"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.22, 0.3, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="2"]
 content_margin_left = 12.0
@@ -240,6 +240,7 @@ theme_override_styles/disabled = SubResource("6")
 text = "☰"
 
 [node name="OptionsMenu" type="PanelContainer" parent="HUD/UIRoot"]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -273,49 +274,49 @@ text = "✕"
 
 [node name="OptionsGrid" type="GridContainer" parent="HUD/UIRoot/OptionsMenu/MenuContent"]
 layout_mode = 2
-columns = 2
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
+columns = 2
 
 [node name="WizardHatButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
+tooltip_text = "desbloquea los magos"
 theme_override_styles/normal = SubResource("9")
 theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("3_wizard_hat")
 expand_icon = true
-tooltip_text = "desbloquea los magos"
 
 [node name="HorseButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
+tooltip_text = "desbloquea los caballeros"
 theme_override_styles/normal = SubResource("9")
 theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("4_horse")
 expand_icon = true
-tooltip_text = "desbloquea los caballeros"
 
 [node name="HandButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
+tooltip_text = "desbloquea la mejora Mano de Dios: ***METER AQUÍ LA DESCRIPCIÓN DE MANO DE DIOS***"
 theme_override_styles/normal = SubResource("9")
 theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("5_hand")
 expand_icon = true
-tooltip_text = "desbloquea la mejora Mano de Dios: ***METER AQUÍ LA DESCRIPCIÓN DE MANO DE DIOS***"
 
 [node name="SwirlButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
+tooltip_text = "desbloquea la habilidad remolino del soldado: ***METER AQUÍ LA DESCRIPCIÓN DE REMOLINO***"
 theme_override_styles/normal = SubResource("9")
 theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("6_swirl")
 expand_icon = true
-tooltip_text = "desbloquea la habilidad remolino del soldado: ***METER AQUÍ LA DESCRIPCIÓN DE REMOLINO***"
 
 [node name="Sidebar" type="PanelContainer" parent="HUD/UIRoot"]
 layout_mode = 1
