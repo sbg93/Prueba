@@ -28,6 +28,14 @@ offset_right = 20.0
 offset_bottom = 20.0
 text = "Oro: 0"
 
+[node name="ClickDamageLabel" type="Label" parent="HUD/UIRoot"]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 20.0
+offset_right = 140.0
+offset_bottom = 20.0
+text = "Daño: 1"
+
 [node name="PlacementLabel" type="Label" parent="HUD/UIRoot"]
 layout_mode = 0
 offset_left = 20.0

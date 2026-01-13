@@ -14,6 +14,7 @@ const RAT_GOLD_VALUE := 1
 
 @onready var playfield: Node2D = $Playfield
 @onready var gold_label: Label = $HUD/UIRoot/GoldLabel
+@onready var click_damage_label: Label = $HUD/UIRoot/ClickDamageLabel
 @onready var placement_label: Label = $HUD/UIRoot/PlacementLabel
 @onready var purchases_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/PurchasesTabButton
 @onready var upgrades_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/UpgradesTabButton
@@ -47,7 +48,7 @@ func _ready() -> void:
 	_update_ui()
 	_show_purchases()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if pending_purchase.is_empty():
 		return
 	if event is InputEventMouseButton and event.pressed:
@@ -156,6 +157,7 @@ func _spawn_soldier(spawn_pos: Vector2) -> void:
 
 func _update_ui() -> void:
 	gold_label.text = "Oro: %d" % gold
+	click_damage_label.text = "Daño: %d" % click_damage
 	rat_nest_button.text = "Comprar (%d)" % _get_nest_cost()
 	soldier_button.text = "Comprar (%d)" % _get_soldier_cost()
 	click_upgrade_button.text = "Comprar (%d)" % _get_click_upgrade_cost()
