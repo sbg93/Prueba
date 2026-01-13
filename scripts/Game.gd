@@ -32,6 +32,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
 @onready var playfield: Node2D = $Playfield
+@onready var playfield_backdrop: Polygon2D = $PlayfieldBackdrop
 @onready var gold_label: Label = $HUD/UIRoot/TopBar/TopBarContent/GoldLabel
 @onready var click_damage_label: Label = $HUD/UIRoot/TopBar/TopBarContent/ClickDamageLabel
 @onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
@@ -98,6 +99,8 @@ var knight_scene := preload("res://scenes/Knight.tscn")
 func _ready() -> void:
 	add_to_group("game")
 	randomize()
+	_refresh_playfield_rect()
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	purchases_tab_button.pressed.connect(_on_purchases_tab_pressed)
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	trash_button.pressed.connect(_on_trash_pressed)
@@ -123,7 +126,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
-		var click_pos := get_viewport().get_mouse_position()
+		var click_pos := get_global_mouse_position()
 		if pending_delete:
 			if event.button_index == MOUSE_BUTTON_RIGHT:
 				_clear_pending_delete()
@@ -242,6 +245,28 @@ func _show_purchases() -> void:
 func _show_upgrades() -> void:
 	purchases_list.visible = false
 	upgrades_list.visible = true
+
+func _on_viewport_size_changed() -> void:
+	_refresh_playfield_rect()
+
+func _refresh_playfield_rect() -> void:
+	if playfield_backdrop == null:
+		return
+	var local_rect := playfield_backdrop.get_item_rect()
+	var transform := playfield_backdrop.get_global_transform()
+	var local_top_left := local_rect.position
+	var local_top_right := Vector2(local_rect.position.x + local_rect.size.x, local_rect.position.y)
+	var local_bottom_left := Vector2(local_rect.position.x, local_rect.position.y + local_rect.size.y)
+	var local_bottom_right := local_rect.position + local_rect.size
+	var top_left := transform * local_top_left
+	var top_right := transform * local_top_right
+	var bottom_left := transform * local_bottom_left
+	var bottom_right := transform * local_bottom_right
+	var min_x := min(min(top_left.x, top_right.x), min(bottom_left.x, bottom_right.x))
+	var max_x := max(max(top_left.x, top_right.x), max(bottom_left.x, bottom_right.x))
+	var min_y := min(min(top_left.y, top_right.y), min(bottom_left.y, bottom_right.y))
+	var max_y := max(max(top_left.y, top_right.y), max(bottom_left.y, bottom_right.y))
+	playfield_rect = Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x, max_y - min_y))
 
 func _on_buy_rat_nest_pressed() -> void:
 	var cost := _get_nest_cost()
