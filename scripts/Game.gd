@@ -2,18 +2,25 @@ extends Node2D
 
 const BASE_NEST_COST := 5
 const BASE_SOLDIER_COST := 5
+const BASE_MAGE_COST := 20
 const BASE_CLICK_UPGRADE_COST := 5
 const BASE_RAT_STEROIDS_COST := 5
 const BASE_SOLDIER_STEROIDS_COST := 5
+const BASE_MAGE_STEROIDS_COST := 20
 
 const NEST_COST_MULTIPLIER := 2
 const SOLDIER_COST_MULTIPLIER := 2
+const MAGE_COST_MULTIPLIER := 2
 const CLICK_UPGRADE_MULTIPLIER := 2
 const RAT_STEROIDS_MULTIPLIER := 2
 const SOLDIER_STEROIDS_MULTIPLIER := 2
+const MAGE_STEROIDS_MULTIPLIER := 2
 
 const BASE_RAT_GOLD_VALUE := 1
 const BASE_SOLDIER_DAMAGE := 1
+const BASE_MAGE_DAMAGE := 3
+const BASE_MAGE_RANGE := 120.0
+const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
 
 @export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
@@ -27,19 +34,25 @@ const BASE_SOLDIER_DAMAGE := 1
 @onready var upgrades_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList
 @onready var rat_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow/RatNestBuyButton
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
+@onready var mage_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
+@onready var mage_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsButton
 
 var gold := 1000
 var click_damage := 1
 var nest_count := 0
 var soldier_count := 0
+var mage_count := 0
 var click_upgrade_count := 0
 var rat_steroids_count := 0
 var soldier_steroids_count := 0
+var mage_steroids_count := 0
 var rat_gold_bonus := 0
 var soldier_damage_bonus := 0
+var mage_damage_bonus := 0
+var mage_range_bonus := 0.0
 
 var pending_purchase := ""
 var pending_cost := 0
@@ -48,6 +61,7 @@ var rat_scene := preload("res://scenes/Rat.tscn")
 var green_rat_scene := preload("res://scenes/GreenRat.tscn")
 var nest_scene := preload("res://scenes/Nest.tscn")
 var soldier_scene := preload("res://scenes/Soldier.tscn")
+var mage_scene := preload("res://scenes/Mage.tscn")
 
 func _ready() -> void:
 	add_to_group("game")
@@ -56,9 +70,11 @@ func _ready() -> void:
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
+	mage_button.pressed.connect(_on_buy_mage_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
+	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
 	_update_ui()
 	_show_purchases()
 
@@ -156,6 +172,14 @@ func _on_buy_soldier_pressed() -> void:
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde desplegar el soldado."
 
+func _on_buy_mage_pressed() -> void:
+	var cost := _get_mage_cost()
+	if gold < cost:
+		return
+	pending_purchase = "mage"
+	pending_cost = cost
+	placement_label.text = "Selecciona dónde desplegar el mago."
+
 func _on_buy_click_upgrade_pressed() -> void:
 	var cost := _get_click_upgrade_cost()
 	if gold < cost:
@@ -184,6 +208,17 @@ func _on_buy_soldier_steroids_pressed() -> void:
 	_update_soldier_damage()
 	_update_ui()
 
+func _on_buy_mage_steroids_pressed() -> void:
+	var cost := _get_mage_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	mage_steroids_count += 1
+	mage_damage_bonus += 1
+	mage_range_bonus += MAGE_RANGE_BONUS_PER_UPGRADE
+	_update_mage_stats()
+	_update_ui()
+
 func _place_pending_purchase(click_pos: Vector2) -> void:
 	gold -= pending_cost
 	if pending_purchase == "nest":
@@ -192,6 +227,9 @@ func _place_pending_purchase(click_pos: Vector2) -> void:
 	elif pending_purchase == "soldier":
 		_spawn_soldier(click_pos)
 		soldier_count += 1
+	elif pending_purchase == "mage":
+		_spawn_mage(click_pos)
+		mage_count += 1
 	_clear_pending_purchase()
 	_update_ui()
 
@@ -214,20 +252,35 @@ func _spawn_soldier(spawn_pos: Vector2) -> void:
 		soldier.attack_damage = BASE_SOLDIER_DAMAGE + soldier_damage_bonus
 	playfield.add_child(soldier)
 
+func _spawn_mage(spawn_pos: Vector2) -> void:
+	var mage := mage_scene.instantiate()
+	mage.position = spawn_pos
+	mage.game = self
+	if "attack_damage" in mage:
+		mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
+	if "attack_range" in mage:
+		mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
+	playfield.add_child(mage)
+
 func _update_ui() -> void:
 	gold_label.text = "Oro: %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
 	rat_nest_button.text = _format_cost(_get_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
+	mage_button.text = _format_cost(_get_mage_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
 	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
 	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
+	mage_steroids_button.text = _format_cost(_get_mage_steroids_cost())
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
 
 func _get_soldier_cost() -> int:
 	return int(BASE_SOLDIER_COST * pow(SOLDIER_COST_MULTIPLIER, soldier_count))
+
+func _get_mage_cost() -> int:
+	return int(BASE_MAGE_COST * pow(MAGE_COST_MULTIPLIER, mage_count))
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
@@ -238,10 +291,20 @@ func _get_rat_steroids_cost() -> int:
 func _get_soldier_steroids_cost() -> int:
 	return int(BASE_SOLDIER_STEROIDS_COST * pow(SOLDIER_STEROIDS_MULTIPLIER, soldier_steroids_count))
 
+func _get_mage_steroids_cost() -> int:
+	return int(BASE_MAGE_STEROIDS_COST * pow(MAGE_STEROIDS_MULTIPLIER, mage_steroids_count))
+
 func _update_soldier_damage() -> void:
 	for soldier in get_tree().get_nodes_in_group("soldiers"):
 		if "attack_damage" in soldier:
 			soldier.attack_damage = BASE_SOLDIER_DAMAGE + soldier_damage_bonus
+
+func _update_mage_stats() -> void:
+	for mage in get_tree().get_nodes_in_group("mages"):
+		if "attack_damage" in mage:
+			mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
+		if "attack_range" in mage:
+			mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
 
 func _format_cost(cost: int) -> String:
 	return "Coste: %d" % cost
