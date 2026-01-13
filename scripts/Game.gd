@@ -3,12 +3,17 @@ extends Node2D
 const BASE_NEST_COST := 5
 const BASE_SOLDIER_COST := 5
 const BASE_CLICK_UPGRADE_COST := 5
+const BASE_RAT_STEROIDS_COST := 5
+const BASE_SOLDIER_STEROIDS_COST := 5
 
 const NEST_COST_MULTIPLIER := 2
 const SOLDIER_COST_MULTIPLIER := 2
 const CLICK_UPGRADE_MULTIPLIER := 2
+const RAT_STEROIDS_MULTIPLIER := 2
+const SOLDIER_STEROIDS_MULTIPLIER := 2
 
-const RAT_GOLD_VALUE := 1
+const BASE_RAT_GOLD_VALUE := 1
+const BASE_SOLDIER_DAMAGE := 1
 
 @export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
@@ -23,12 +28,18 @@ const RAT_GOLD_VALUE := 1
 @onready var rat_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow/RatNestBuyButton
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
+@onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
+@onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
 
 var gold := 10
 var click_damage := 1
 var nest_count := 0
 var soldier_count := 0
 var click_upgrade_count := 0
+var rat_steroids_count := 0
+var soldier_steroids_count := 0
+var rat_gold_bonus := 0
+var soldier_damage_bonus := 0
 
 var pending_purchase := ""
 var pending_cost := 0
@@ -45,6 +56,8 @@ func _ready() -> void:
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
+	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
+	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
 	_update_ui()
 	_show_purchases()
 
@@ -102,7 +115,7 @@ func get_nearest_rat(from_pos: Vector2) -> Node:
 	return nearest
 
 func _on_rat_died() -> void:
-	gold += RAT_GOLD_VALUE
+	gold += BASE_RAT_GOLD_VALUE + rat_gold_bonus
 	_update_ui()
 
 func _on_purchases_tab_pressed() -> void:
@@ -144,6 +157,25 @@ func _on_buy_click_upgrade_pressed() -> void:
 	click_damage += 1
 	_update_ui()
 
+func _on_buy_rat_steroids_pressed() -> void:
+	var cost := _get_rat_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	rat_steroids_count += 1
+	rat_gold_bonus += 1
+	_update_ui()
+
+func _on_buy_soldier_steroids_pressed() -> void:
+	var cost := _get_soldier_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	soldier_steroids_count += 1
+	soldier_damage_bonus += 1
+	_update_soldier_damage()
+	_update_ui()
+
 func _place_pending_purchase(click_pos: Vector2) -> void:
 	gold -= pending_cost
 	if pending_purchase == "nest":
@@ -170,6 +202,8 @@ func _spawn_soldier(spawn_pos: Vector2) -> void:
 	var soldier := soldier_scene.instantiate()
 	soldier.position = spawn_pos
 	soldier.game = self
+	if "attack_damage" in soldier:
+		soldier.attack_damage = BASE_SOLDIER_DAMAGE + soldier_damage_bonus
 	playfield.add_child(soldier)
 
 func _update_ui() -> void:
@@ -178,6 +212,8 @@ func _update_ui() -> void:
 	rat_nest_button.text = _format_cost(_get_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
+	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
+	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
@@ -187,6 +223,17 @@ func _get_soldier_cost() -> int:
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
+
+func _get_rat_steroids_cost() -> int:
+	return int(BASE_RAT_STEROIDS_COST * pow(RAT_STEROIDS_MULTIPLIER, rat_steroids_count))
+
+func _get_soldier_steroids_cost() -> int:
+	return int(BASE_SOLDIER_STEROIDS_COST * pow(SOLDIER_STEROIDS_MULTIPLIER, soldier_steroids_count))
+
+func _update_soldier_damage() -> void:
+	for soldier in get_tree().get_nodes_in_group("soldiers"):
+		if "attack_damage" in soldier:
+			soldier.attack_damage = BASE_SOLDIER_DAMAGE + soldier_damage_bonus
 
 func _format_cost(cost: int) -> String:
 	return "Coste: %d" % cost

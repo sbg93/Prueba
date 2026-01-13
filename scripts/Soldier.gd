@@ -11,6 +11,7 @@ var _attack_sound: AudioStreamPlayer2D
 var _attack_stream: AudioStreamGenerator
 
 func _ready() -> void:
+	add_to_group("soldiers")
 	_attack_stream = AudioStreamGenerator.new()
 	_attack_stream.mix_rate = 44100
 	_attack_stream.buffer_length = 0.3
