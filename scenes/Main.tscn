@@ -1,6 +1,106 @@
-[gd_scene load_steps=2 format=3 uid="uid://wyvqlr8vokud"]
+[gd_scene load_steps=8 format=3 uid="uid://wyvqlr8vokud"]
 
 [ext_resource type="Script" uid="uid://cke0l5f01oc54" path="res://scripts/Game.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.09, 0.1, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.34, 0.42, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+expand_margin_left = 6
+expand_margin_top = 6
+expand_margin_right = 6
+expand_margin_bottom = 6
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(0.06, 0.07, 0.1, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.24, 0.28, 0.35, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 12
+content_margin_top = 12
+content_margin_right = 12
+content_margin_bottom = 12
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="3"]
+bg_color = Color(0.16, 0.19, 0.26, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.44, 0.55, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 12
+content_margin_right = 12
+content_margin_top = 6
+content_margin_bottom = 6
+
+[sub_resource type="StyleBoxFlat" id="4"]
+bg_color = Color(0.2, 0.24, 0.32, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.68, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 12
+content_margin_right = 12
+content_margin_top = 6
+content_margin_bottom = 6
+
+[sub_resource type="StyleBoxFlat" id="5"]
+bg_color = Color(0.12, 0.15, 0.22, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32, 0.38, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 12
+content_margin_right = 12
+content_margin_top = 6
+content_margin_bottom = 6
+
+[sub_resource type="StyleBoxFlat" id="6"]
+bg_color = Color(0.1, 0.12, 0.16, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.22, 0.28, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 12
+content_margin_right = 12
+content_margin_top = 6
+content_margin_bottom = 6
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1")
@@ -23,28 +123,38 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GoldLabel" type="Label" parent="HUD/UIRoot"]
-layout_mode = 0
+[node name="TopBar" type="PanelContainer" parent="HUD/UIRoot"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_left = 20.0
-offset_top = 20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_top = 16.0
+offset_right = -320.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("1")
+
+[node name="TopBarContent" type="HBoxContainer" parent="HUD/UIRoot/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="GoldLabel" type="Label" parent="HUD/UIRoot/TopBar/TopBarContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 18
 text = "Oro: 0"
 
-[node name="ClickDamageLabel" type="Label" parent="HUD/UIRoot"]
-layout_mode = 0
-offset_left = 140.0
-offset_top = 20.0
-offset_right = 140.0
-offset_bottom = 20.0
+[node name="ClickDamageLabel" type="Label" parent="HUD/UIRoot/TopBar/TopBarContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
 text = "Daño: 1"
 
-[node name="PlacementLabel" type="Label" parent="HUD/UIRoot"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 48.0
-offset_right = 20.0
-offset_bottom = 48.0
+[node name="PlacementLabel" type="Label" parent="HUD/UIRoot/TopBar/TopBarContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 0.98, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
 
 [node name="Sidebar" type="PanelContainer" parent="HUD/UIRoot"]
 layout_mode = 1
@@ -58,20 +168,35 @@ offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_styles/panel = SubResource("2")
 
 [node name="SidebarContent" type="VBoxContainer" parent="HUD/UIRoot/Sidebar"]
 layout_mode = 2
+theme_override_constants/separation = 14
 
 [node name="TabButtons" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
 [node name="PurchasesTabButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/TabButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "Compras"
 
 [node name="UpgradesTabButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/TabButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "Mejoras"
 
 [node name="PurchasesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
@@ -84,10 +209,18 @@ layout_mode = 2
 [node name="RatNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Nido de ratas"
 
 [node name="RatNestBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "5"
 
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
@@ -96,10 +229,18 @@ layout_mode = 2
 [node name="SoldierLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Soldado"
 
 [node name="SoldierBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "5"
 
 [node name="MageRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
@@ -108,10 +249,18 @@ layout_mode = 2
 [node name="MageLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Mago"
 
 [node name="MageBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "20"
 
 [node name="UpgradesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
@@ -124,10 +273,18 @@ layout_mode = 2
 [node name="ClickUpgradeLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Mejora de click"
 
 [node name="ClickUpgradeButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "5"
 
 [node name="RatSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -136,10 +293,18 @@ layout_mode = 2
 [node name="RatSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Esteroides de rata"
 
 [node name="RatSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "5"
 
 [node name="SoldierSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -148,10 +313,18 @@ layout_mode = 2
 [node name="SoldierSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Esteroides de soldado"
 
 [node name="SoldierSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "5"
 
 [node name="MageSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -160,8 +333,16 @@ layout_mode = 2
 [node name="MageSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
 text = "Esteroides de mago"
 
 [node name="MageSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/disabled = SubResource("6")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
 text = "20"

@@ -25,9 +25,9 @@ const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
 @export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
 @onready var playfield: Node2D = $Playfield
-@onready var gold_label: Label = $HUD/UIRoot/GoldLabel
-@onready var click_damage_label: Label = $HUD/UIRoot/ClickDamageLabel
-@onready var placement_label: Label = $HUD/UIRoot/PlacementLabel
+@onready var gold_label: Label = $HUD/UIRoot/TopBar/TopBarContent/GoldLabel
+@onready var click_damage_label: Label = $HUD/UIRoot/TopBar/TopBarContent/ClickDamageLabel
+@onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
 @onready var purchases_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/PurchasesTabButton
 @onready var upgrades_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/UpgradesTabButton
 @onready var purchases_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList
