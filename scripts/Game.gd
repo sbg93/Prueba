@@ -10,6 +10,7 @@ const BASE_RAT_STEROIDS_COST := 5
 const BASE_GOBLIN_STEROIDS_COST := 20
 const BASE_SOLDIER_STEROIDS_COST := 5
 const BASE_MAGE_STEROIDS_COST := 20
+const BASE_KNIGHT_STEROIDS_COST := 50
 const BASE_DOUBLE_FIREBALL_COST := 100
 
 const NEST_COST_MULTIPLIER := 2
@@ -22,11 +23,13 @@ const RAT_STEROIDS_MULTIPLIER := 2
 const GOBLIN_STEROIDS_MULTIPLIER := 3
 const SOLDIER_STEROIDS_MULTIPLIER := 2
 const MAGE_STEROIDS_MULTIPLIER := 2
+const KNIGHT_STEROIDS_MULTIPLIER := 2
 
 const BASE_RAT_GOLD_VALUE := 1
 const BASE_SOLDIER_DAMAGE := 1
 const BASE_MAGE_DAMAGE := 3
 const BASE_MAGE_RANGE := 120.0
+const BASE_KNIGHT_SPEED := 220.0
 const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
 const DELETE_SELECT_RADIUS := 26.0
 
@@ -51,6 +54,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var goblin_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsCountLabel
 @onready var soldier_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsCountLabel
 @onready var mage_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsCountLabel
+@onready var knight_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow/KnightSteroidsCountLabel
 @onready var rat_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow/RatNestBuyButton
 @onready var goblin_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow/GoblinNestBuyButton
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
@@ -61,6 +65,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var goblin_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsButton
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
 @onready var mage_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsButton
+@onready var knight_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow/KnightSteroidsButton
 @onready var double_fireball_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow
 @onready var double_fireball_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballCountLabel
 @onready var double_fireball_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballButton
@@ -77,11 +82,13 @@ var rat_steroids_count := 0
 var goblin_steroids_count := 0
 var soldier_steroids_count := 0
 var mage_steroids_count := 0
+var knight_steroids_count := 0
 var rat_gold_bonus := 0
 var goblin_gold_bonus := 0
 var soldier_damage_bonus := 0
 var mage_damage_bonus := 0
 var mage_range_bonus := 0.0
+var knight_speed_multiplier := 1.0
 var double_fireball_purchased := false
 
 var pending_purchase := ""
@@ -116,6 +123,7 @@ func _ready() -> void:
 	goblin_steroids_button.pressed.connect(_on_buy_goblin_steroids_pressed)
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
 	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
+	knight_steroids_button.pressed.connect(_on_buy_knight_steroids_pressed)
 	double_fireball_button.pressed.connect(_on_buy_double_fireball_pressed)
 	_click_stream = AudioStreamGenerator.new()
 	_click_stream.mix_rate = 44100
@@ -342,6 +350,16 @@ func _on_buy_mage_steroids_pressed() -> void:
 	_update_mage_stats()
 	_update_ui()
 
+func _on_buy_knight_steroids_pressed() -> void:
+	var cost := _get_knight_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	knight_steroids_count += 1
+	knight_speed_multiplier *= 1.1
+	_update_knight_speed()
+	_update_ui()
+
 func _on_buy_double_fireball_pressed() -> void:
 	if double_fireball_purchased:
 		return
@@ -450,6 +468,8 @@ func _spawn_knight(spawn_pos: Vector2) -> void:
 	var knight := knight_scene.instantiate()
 	knight.position = spawn_pos
 	knight.game = self
+	if "speed" in knight:
+		knight.speed = BASE_KNIGHT_SPEED * knight_speed_multiplier
 	playfield.add_child(knight)
 
 func _update_ui() -> void:
@@ -465,6 +485,7 @@ func _update_ui() -> void:
 	goblin_steroids_count_label.text = str(goblin_steroids_count)
 	soldier_steroids_count_label.text = str(soldier_steroids_count)
 	mage_steroids_count_label.text = str(mage_steroids_count)
+	knight_steroids_count_label.text = str(knight_steroids_count)
 	double_fireball_count_label.text = "1" if double_fireball_purchased else "0"
 	rat_nest_button.text = _format_cost(_get_nest_cost())
 	goblin_nest_button.text = _format_cost(_get_goblin_nest_cost())
@@ -476,6 +497,7 @@ func _update_ui() -> void:
 	goblin_steroids_button.text = _format_cost(_get_goblin_steroids_cost())
 	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
 	mage_steroids_button.text = _format_cost(_get_mage_steroids_cost())
+	knight_steroids_button.text = _format_cost(_get_knight_steroids_cost())
 	double_fireball_row.visible = mage_steroids_count >= 5 or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
@@ -510,6 +532,9 @@ func _get_soldier_steroids_cost() -> int:
 func _get_mage_steroids_cost() -> int:
 	return int(BASE_MAGE_STEROIDS_COST * pow(MAGE_STEROIDS_MULTIPLIER, mage_steroids_count))
 
+func _get_knight_steroids_cost() -> int:
+	return int(BASE_KNIGHT_STEROIDS_COST * pow(KNIGHT_STEROIDS_MULTIPLIER, knight_steroids_count))
+
 func _update_soldier_damage() -> void:
 	for soldier in get_tree().get_nodes_in_group("soldiers"):
 		if "attack_damage" in soldier:
@@ -521,6 +546,11 @@ func _update_mage_stats() -> void:
 			mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
 		if "attack_range" in mage:
 			mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
+
+func _update_knight_speed() -> void:
+	for knight in get_tree().get_nodes_in_group("knights"):
+		if "speed" in knight:
+			knight.speed = BASE_KNIGHT_SPEED * knight_speed_multiplier
 
 func is_double_fireball_unlocked() -> bool:
 	return double_fireball_purchased
