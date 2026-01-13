@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 	if _attack_timer >= attack_interval:
 		_attack_timer = 0.0
 		_spawn_fireball(_current_target)
+		_spawn_double_fireball()
 		_play_attack_sound()
 
 func _is_target_valid(target) -> bool:
@@ -89,3 +90,27 @@ func _spawn_fireball(target) -> void:
 		fireball.call("launch", global_position, target, attack_damage)
 	else:
 		fireball.global_position = global_position
+
+func _spawn_double_fireball() -> void:
+	if game == null or not game.has_method("is_double_fireball_unlocked"):
+		return
+	if not game.is_double_fireball_unlocked():
+		return
+	var enemies_in_range := _get_enemies_in_range()
+	if enemies_in_range.size() <= 1:
+		return
+	var secondary_candidates: Array[Node2D] = []
+	for enemy in enemies_in_range:
+		if enemy != _current_target:
+			secondary_candidates.append(enemy)
+	if secondary_candidates.is_empty():
+		return
+	var secondary_target := secondary_candidates[randi_range(0, secondary_candidates.size() - 1)]
+	_spawn_fireball(secondary_target)
+
+func _get_enemies_in_range() -> Array[Node2D]:
+	var enemies_in_range: Array[Node2D] = []
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy is Node2D and global_position.distance_to(enemy.global_position) <= attack_range:
+			enemies_in_range.append(enemy)
+	return enemies_in_range

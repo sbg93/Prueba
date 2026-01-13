@@ -519,3 +519,34 @@ theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
 text = "20"
+
+[node name="DoubleFireballRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
+visible = false
+layout_mode = 2
+
+[node name="DoubleFireballCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = "0"
+
+[node name="DoubleFireballLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+tooltip_text = "Permite a los magos lanzar dos bolas de fuego a enemigos distintos cuando haya más de uno en su alcance."
+text = "Bola de fuego doble"
+
+[node name="DoubleFireballButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+tooltip_text = "Permite a los magos lanzar dos bolas de fuego a enemigos distintos cuando haya más de uno en su alcance."
+text = "100"
