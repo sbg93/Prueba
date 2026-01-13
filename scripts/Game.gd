@@ -48,7 +48,7 @@ func _ready() -> void:
 	_update_ui()
 	_show_purchases()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		var click_pos := get_viewport().get_mouse_position()
 		if event.button_index == MOUSE_BUTTON_LEFT and pending_purchase.is_empty():
@@ -175,9 +175,9 @@ func _spawn_soldier(spawn_pos: Vector2) -> void:
 func _update_ui() -> void:
 	gold_label.text = "Oro: %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
-	rat_nest_button.text = "%d" % _get_nest_cost()
-	soldier_button.text = "%d" % _get_soldier_cost()
-	click_upgrade_button.text = "%d" % _get_click_upgrade_cost()
+	rat_nest_button.text = _format_cost(_get_nest_cost())
+	soldier_button.text = _format_cost(_get_soldier_cost())
+	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
@@ -187,3 +187,6 @@ func _get_soldier_cost() -> int:
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
+
+func _format_cost(cost: int) -> String:
+	return "Coste: %d" % cost
