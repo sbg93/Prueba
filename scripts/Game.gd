@@ -23,7 +23,7 @@ const RAT_GOLD_VALUE := 1
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
 
-var gold := 0
+var gold := 10
 var click_damage := 1
 var nest_count := 0
 var soldier_count := 0
