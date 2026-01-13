@@ -31,7 +31,7 @@ const BASE_SOLDIER_DAMAGE := 1
 const BASE_MAGE_DAMAGE := 3
 const BASE_MAGE_RANGE := 120.0
 const BASE_KNIGHT_SPEED := 220.0
-const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
+const MAGE_RANGE_MULTIPLIER_PER_UPGRADE := 1.10
 const DELETE_SELECT_RADIUS := 26.0
 
 @export var playfield_rect := Rect2()
@@ -91,8 +91,7 @@ var knight_steroids_count := 0
 var rat_gold_bonus := 0
 var goblin_gold_bonus := 0
 var soldier_damage_bonus := 0
-var mage_damage_bonus := 0
-var mage_range_bonus := 0.0
+var mage_range_multiplier := 1.0
 var knight_speed_multiplier := 1.0
 var double_fireball_purchased := false
 var torbellino_purchased := false
@@ -397,8 +396,7 @@ func _on_buy_mage_steroids_pressed() -> void:
 		return
 	gold -= cost
 	mage_steroids_count += 1
-	mage_damage_bonus += 1
-	mage_range_bonus += MAGE_RANGE_BONUS_PER_UPGRADE
+	mage_range_multiplier *= MAGE_RANGE_MULTIPLIER_PER_UPGRADE
 	_update_mage_stats()
 	_update_ui()
 
@@ -520,10 +518,8 @@ func _spawn_mage(spawn_pos: Vector2) -> void:
 	var mage := mage_scene.instantiate()
 	mage.position = spawn_pos
 	mage.game = self
-	if "attack_damage" in mage:
-		mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
 	if "attack_range" in mage:
-		mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
+		mage.attack_range = BASE_MAGE_RANGE * mage_range_multiplier
 	playfield.add_child(mage)
 
 func _spawn_knight(spawn_pos: Vector2) -> void:
@@ -608,10 +604,8 @@ func _update_soldier_damage() -> void:
 
 func _update_mage_stats() -> void:
 	for mage in get_tree().get_nodes_in_group("mages"):
-		if "attack_damage" in mage:
-			mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
 		if "attack_range" in mage:
-			mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
+			mage.attack_range = BASE_MAGE_RANGE * mage_range_multiplier
 
 func _update_knight_speed() -> void:
 	for knight in get_tree().get_nodes_in_group("knights"):
