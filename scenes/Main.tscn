@@ -285,6 +285,7 @@ theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("3_wizard_hat")
 expand_icon = true
+tooltip_text = "desbloquea los magos"
 
 [node name="HorseButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
@@ -294,6 +295,7 @@ theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("4_horse")
 expand_icon = true
+tooltip_text = "desbloquea los caballeros"
 
 [node name="HandButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
@@ -303,6 +305,7 @@ theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("5_hand")
 expand_icon = true
+tooltip_text = "desbloquea la mejora Mano de Dios: ***METER AQUÍ LA DESCRIPCIÓN DE MANO DE DIOS***"
 
 [node name="SwirlButton" type="Button" parent="HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid"]
 custom_minimum_size = Vector2(72, 72)
@@ -312,6 +315,7 @@ theme_override_styles/pressed = SubResource("9")
 theme_override_styles/hover = SubResource("9")
 icon = ExtResource("6_swirl")
 expand_icon = true
+tooltip_text = "desbloquea la habilidad remolino del soldado: ***METER AQUÍ LA DESCRIPCIÓN DE REMOLINO***"
 
 [node name="Sidebar" type="PanelContainer" parent="HUD/UIRoot"]
 layout_mode = 1
