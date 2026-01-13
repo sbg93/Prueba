@@ -10,6 +10,7 @@ var _attack_timer := 0.0
 var _attack_sound: AudioStreamPlayer2D
 var _attack_stream: AudioStreamGenerator
 var _current_target
+var _fireball_scene := preload("res://scenes/Fireball.tscn")
 
 func _ready() -> void:
 	add_to_group("mages")
@@ -37,6 +38,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if _attack_timer >= attack_interval:
 		_attack_timer = 0.0
+		_spawn_fireball(_current_target)
 		if _current_target != null and _current_target.has_method("take_damage"):
 			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
@@ -71,3 +73,21 @@ func _play_attack_sound() -> void:
 		var crackle := randf_range(-1.0, 1.0) * 0.3
 		var sample := (flame + crackle) * envelope * 0.6
 		playback.push_frame(Vector2(sample, sample))
+
+func _spawn_fireball(target) -> void:
+	if _fireball_scene == null:
+		return
+	if target == null or not is_instance_valid(target) or not (target is Node2D):
+		return
+	var fireball := _fireball_scene.instantiate() as Node2D
+	if fireball == null:
+		return
+	var parent_node := get_parent()
+	if parent_node != null:
+		parent_node.add_child(fireball)
+	else:
+		add_child(fireball)
+	if fireball.has_method("launch"):
+		fireball.call("launch", global_position, target)
+	else:
+		fireball.global_position = global_position
