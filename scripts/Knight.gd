@@ -3,11 +3,10 @@ extends Node2D
 @export var speed := 220.0
 @export var attack_damage := 5
 @export var attack_interval := 3.0
-@export var hit_radius := 24.0
+@export var hit_radius := 48.0
 @export var whirlwind_radius := 120.0
 
 var game: Node
-var _base_hit_radius := 0.0
 var _attack_timer := 0.0
 var _current_target
 var _charging := false
@@ -21,7 +20,6 @@ var _hit_stream: AudioStreamGenerator
 
 func _ready() -> void:
 	add_to_group("knights")
-	_base_hit_radius = hit_radius
 	_charge_stream = AudioStreamGenerator.new()
 	_charge_stream.mix_rate = 44100
 	_charge_stream.buffer_length = 0.4
@@ -39,7 +37,7 @@ func _ready() -> void:
 
 func apply_size_multiplier(multiplier: float) -> void:
 	scale = Vector2.ONE * multiplier
-	hit_radius = _base_hit_radius * multiplier
+	hit_radius = hit_radius * (multiplier*0.50)
 
 func _physics_process(delta: float) -> void:
 	_attack_timer += delta
