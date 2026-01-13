@@ -175,9 +175,9 @@ func _spawn_soldier(spawn_pos: Vector2) -> void:
 func _update_ui() -> void:
 	gold_label.text = "Oro: %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
-	rat_nest_button.text = "Comprar (%d)" % _get_nest_cost()
-	soldier_button.text = "Comprar (%d)" % _get_soldier_cost()
-	click_upgrade_button.text = "Comprar (%d)" % _get_click_upgrade_cost()
+	rat_nest_button.text = "%d" % _get_nest_cost()
+	soldier_button.text = "%d" % _get_soldier_cost()
+	click_upgrade_button.text = "%d" % _get_click_upgrade_cost()
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
