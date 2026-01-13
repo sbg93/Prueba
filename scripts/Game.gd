@@ -105,16 +105,22 @@ func spawn_rat_at_position(spawn_pos: Vector2, is_green: bool = false) -> Node:
 	rat.died.connect(_on_rat_died)
 	return rat
 
-func get_nearest_rat(from_pos: Vector2) -> Node:
+func get_random_near_rat(from_pos: Vector2, candidates_count: int = 3) -> Node:
 	var rats := get_tree().get_nodes_in_group("rats")
-	var nearest : Node = null
-	var nearest_distance := INF
+	if rats.is_empty():
+		return null
+	var candidates: Array[Dictionary] = []
 	for rat in rats:
-		var distance := from_pos.distance_to(rat.global_position)
-		if distance < nearest_distance:
-			nearest_distance = distance
-			nearest = rat
-	return nearest
+		candidates.append({
+			"rat": rat,
+			"distance": from_pos.distance_to(rat.global_position)
+		})
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return a["distance"] < b["distance"]
+	)
+	var max_candidates := min(candidates_count, candidates.size())
+	var choice_index := randi_range(0, max_candidates - 1)
+	return candidates[choice_index]["rat"]
 
 func _on_rat_died(gold_value: int) -> void:
 	gold += gold_value + rat_gold_bonus
