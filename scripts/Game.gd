@@ -10,7 +10,7 @@ const CLICK_UPGRADE_MULTIPLIER := 2
 
 const RAT_GOLD_VALUE := 1
 
-@export var playfield_rect := Rect2(Vector2(40, 80), Vector2(720, 440))
+@export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
 @onready var playfield: Node2D = $Playfield
 @onready var gold_label: Label = $HUD/UIRoot/GoldLabel
