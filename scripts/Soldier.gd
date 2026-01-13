@@ -81,11 +81,13 @@ func _play_attack_sound() -> void:
 func _setup_animations() -> void:
 	_animation_player = AnimationPlayer.new()
 	add_child(_animation_player)
-	_create_walk_animation()
-	_create_attack_animation()
+	var library := AnimationLibrary.new()
+	library.add_animation("walk", _create_walk_animation())
+	library.add_animation("attack", _create_attack_animation())
+	_animation_player.add_animation_library("default", library)
 	_animation_player.play("walk")
 
-func _create_walk_animation() -> void:
+func _create_walk_animation() -> Animation:
 	var walk := Animation.new()
 	walk.length = 0.6
 	walk.loop_mode = Animation.LOOP_LINEAR
@@ -103,9 +105,9 @@ func _create_walk_animation() -> void:
 	walk.track_insert_key(scale_track, 0.3, Vector2(1.04, 0.98))
 	walk.track_insert_key(scale_track, 0.45, Vector2(0.96, 1.02))
 	walk.track_insert_key(scale_track, 0.6, Vector2(1.0, 1.0))
-	_animation_player.add_animation("walk", walk)
+	return walk
 
-func _create_attack_animation() -> void:
+func _create_attack_animation() -> Animation:
 	var attack := Animation.new()
 	attack.length = 0.35
 	attack.loop_mode = Animation.LOOP_NONE
@@ -121,7 +123,7 @@ func _create_attack_animation() -> void:
 	attack.track_insert_key(rotation_track, 0.1, -0.4)
 	attack.track_insert_key(rotation_track, 0.2, 0.35)
 	attack.track_insert_key(rotation_track, 0.35, 0.0)
-	_animation_player.add_animation("attack", attack)
+	return attack
 
 func _play_walk_animation() -> void:
 	if _animation_player == null:
