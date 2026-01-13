@@ -6,10 +6,12 @@ extends Node2D
 var _target: Node2D
 var _target_position: Vector2
 var _time := 0.0
+var _damage := 0
 
-func launch(start_pos: Vector2, target: Node2D) -> void:
+func launch(start_pos: Vector2, target: Node2D, damage: int = 0) -> void:
 	global_position = start_pos
 	_target = target
+	_damage = damage
 	if _target != null:
 		_target_position = _target.global_position
 	else:
@@ -22,11 +24,20 @@ func _process(delta: float) -> void:
 	var distance := global_position.distance_to(_target_position)
 	if distance <= speed * delta:
 		global_position = _target_position
+		_apply_damage()
 		queue_free()
 		return
 	var direction := (_target_position - global_position).normalized()
 	global_position += direction * speed * delta
 	queue_redraw()
+
+func _apply_damage() -> void:
+	if _damage <= 0:
+		return
+	if _target == null or not is_instance_valid(_target):
+		return
+	if _target.has_method("take_damage"):
+		_target.take_damage(_damage)
 
 func _draw() -> void:
 	var flicker := 1.0 + sin(_time * 12.0) * 0.1
