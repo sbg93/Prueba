@@ -68,6 +68,7 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var rat_nest_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow/RatNestCountLabel
 @onready var goblin_nest_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow/GoblinNestCountLabel
 @onready var soldier_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierCountLabel
+@onready var mage_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow
 @onready var mage_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageCountLabel
 @onready var knight_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightCountLabel
 @onready var click_upgrade_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeCountLabel
@@ -76,6 +77,7 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var rat_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsCountLabel
 @onready var goblin_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsCountLabel
 @onready var soldier_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsCountLabel
+@onready var mage_steroids_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow
 @onready var mage_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsCountLabel
 @onready var knight_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow/KnightSteroidsCountLabel
 @onready var knight_anabolizantes_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightAnabolizantesRow
@@ -772,7 +774,9 @@ func _update_ui() -> void:
 	mage_steroids_button.text = _format_cost(_get_mage_steroids_cost())
 	knight_steroids_button.text = _format_cost(_get_knight_steroids_cost())
 	knight_anabolizantes_button.text = _format_cost(_get_knight_anabolizantes_cost())
-	double_fireball_row.visible = mage_steroids_count >= 5 or double_fireball_purchased
+	mage_row.visible = _is_mage_unlocked() or mage_count > 0
+	mage_steroids_row.visible = _is_mage_unlocked() or mage_steroids_count > 0
+	double_fireball_row.visible = (_is_mage_unlocked() and mage_steroids_count >= 5) or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
 	torbellino_row.visible = soldier_steroids_count >= 5 or torbellino_purchased
@@ -864,6 +868,9 @@ func _update_knight_size() -> void:
 			knight.apply_size_multiplier(knight_size_multiplier)
 		else:
 			knight.scale = Vector2.ONE * knight_size_multiplier
+
+func _is_mage_unlocked() -> bool:
+	return permanent_option_skills.get(wizard_hat_button, false)
 
 func is_double_fireball_unlocked() -> bool:
 	return double_fireball_purchased
