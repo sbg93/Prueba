@@ -24,7 +24,7 @@ func _spawn_rat() -> void:
 		randf_range(-spawn_radius, spawn_radius),
 		randf_range(-spawn_radius, spawn_radius)
 	)
-	var rat := game.spawn_rat_at_position(global_position + offset)
+	var rat : Node = game.spawn_rat_at_position(global_position + offset)
 	if rat != null:
 		_active_rats += 1
 		rat.died.connect(_on_rat_died)
