@@ -12,9 +12,27 @@ var _charging := false
 var _charge_direction := Vector2.ZERO
 var _charge_target_pos := Vector2.ZERO
 var _hit_targets: Array = []
+var _charge_sound: AudioStreamPlayer2D
+var _charge_stream: AudioStreamGenerator
+var _hit_sound: AudioStreamPlayer2D
+var _hit_stream: AudioStreamGenerator
 
 func _ready() -> void:
 	add_to_group("knights")
+	_charge_stream = AudioStreamGenerator.new()
+	_charge_stream.mix_rate = 44100
+	_charge_stream.buffer_length = 0.4
+	_charge_sound = AudioStreamPlayer2D.new()
+	_charge_sound.stream = _charge_stream
+	_charge_sound.volume_db = -4.0
+	add_child(_charge_sound)
+	_hit_stream = AudioStreamGenerator.new()
+	_hit_stream.mix_rate = 44100
+	_hit_stream.buffer_length = 0.2
+	_hit_sound = AudioStreamPlayer2D.new()
+	_hit_sound.stream = _hit_stream
+	_hit_sound.volume_db = -2.0
+	add_child(_hit_sound)
 
 func _physics_process(delta: float) -> void:
 	_attack_timer += delta
@@ -39,6 +57,7 @@ func _start_charge(target_pos: Vector2) -> void:
 	_charge_target_pos = _get_wall_hit_point(global_position, direction)
 	_hit_targets.clear()
 	_charging = true
+	_play_charge_sound()
 
 func _perform_charge(delta: float) -> void:
 	_apply_charge_damage()
@@ -70,6 +89,7 @@ func _apply_charge_damage() -> void:
 			_hit_targets.append(collider)
 			if collider.has_method("take_damage"):
 				collider.take_damage(attack_damage)
+			_play_hit_sound()
 
 func _get_wall_hit_point(origin: Vector2, direction: Vector2) -> Vector2:
 	if game == null or not ("playfield_rect" in game):
@@ -118,3 +138,49 @@ func _is_target_valid(target) -> bool:
 		and target is Node2D
 		and target.is_inside_tree()
 	)
+
+func _play_charge_sound() -> void:
+	if _charge_sound == null or _charge_stream == null:
+		return
+	_charge_sound.play()
+	var playback := _charge_sound.get_stream_playback() as AudioStreamGeneratorPlayback
+	if playback == null:
+		return
+	var sample_rate := _charge_stream.mix_rate
+	var duration := 0.35
+	var sample_count := int(sample_rate * duration)
+	for i in range(sample_count):
+		var t := float(i) / float(sample_rate)
+		var envelope := 1.0
+		if t < 0.05:
+			envelope = t / 0.05
+		elif t > 0.28:
+			envelope = max(0.0, (duration - t) / 0.07)
+		var gallop := sin(2.0 * PI * 90.0 * t) * 0.4
+		var thump := sin(2.0 * PI * 45.0 * t) * 0.6
+		var noise := randf_range(-0.2, 0.2)
+		var beat := 0.5 + 0.5 * sin(2.0 * PI * 6.0 * t)
+		var sample := (gallop * 0.4 + thump * 0.6 + noise) * envelope * beat
+		playback.push_frame(Vector2(sample, sample))
+
+func _play_hit_sound() -> void:
+	if _hit_sound == null or _hit_stream == null:
+		return
+	_hit_sound.play()
+	var playback := _hit_sound.get_stream_playback() as AudioStreamGeneratorPlayback
+	if playback == null:
+		return
+	var sample_rate := _hit_stream.mix_rate
+	var duration := 0.12
+	var sample_count := int(sample_rate * duration)
+	for i in range(sample_count):
+		var t := float(i) / float(sample_rate)
+		var envelope := 1.0
+		if t < 0.01:
+			envelope = t / 0.01
+		elif t > 0.08:
+			envelope = max(0.0, (duration - t) / 0.04)
+		var noise := randf_range(-1.0, 1.0)
+		var tone := sin(2.0 * PI * 980.0 * t) * 0.5
+		var sample := (noise * 0.6 + tone * 0.4) * envelope * 0.7
+		playback.push_frame(Vector2(sample, sample))
