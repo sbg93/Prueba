@@ -1,10 +1,11 @@
 extends Area2D
 
-signal died
+signal died(gold_value: int)
 
 @export var max_health := 5
 @export var move_speed := 20.0
 @export var direction_change_range := Vector2(1.5, 3.5)
+@export var gold_value := 1
 
 var health := 5
 var game: Node
@@ -34,7 +35,7 @@ func _process(delta: float) -> void:
 func take_damage(amount: int) -> void:
 	health = max(health - amount, 0)
 	if health == 0:
-		died.emit()
+		died.emit(gold_value)
 		queue_free()
 
 func _set_random_direction() -> void:

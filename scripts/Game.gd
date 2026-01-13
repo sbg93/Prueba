@@ -45,6 +45,7 @@ var pending_purchase := ""
 var pending_cost := 0
 
 var rat_scene := preload("res://scenes/Rat.tscn")
+var green_rat_scene := preload("res://scenes/GreenRat.tscn")
 var nest_scene := preload("res://scenes/Nest.tscn")
 var soldier_scene := preload("res://scenes/Soldier.tscn")
 
@@ -95,8 +96,9 @@ func _apply_click_damage_at(click_pos: Vector2) -> void:
 			apply_click_damage(collider)
 			return
 
-func spawn_rat_at_position(spawn_pos: Vector2) -> Node:
-	var rat := rat_scene.instantiate()
+func spawn_rat_at_position(spawn_pos: Vector2, is_green: bool = false) -> Node:
+	var rat_scene_to_use := green_rat_scene if is_green else rat_scene
+	var rat := rat_scene_to_use.instantiate()
 	rat.position = spawn_pos
 	rat.game = self
 	playfield.add_child(rat)
@@ -114,8 +116,8 @@ func get_nearest_rat(from_pos: Vector2) -> Node:
 			nearest = rat
 	return nearest
 
-func _on_rat_died() -> void:
-	gold += BASE_RAT_GOLD_VALUE + rat_gold_bonus
+func _on_rat_died(gold_value: int) -> void:
+	gold += gold_value + rat_gold_bonus
 	_update_ui()
 
 func _on_purchases_tab_pressed() -> void:
