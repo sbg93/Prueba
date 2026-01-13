@@ -74,7 +74,7 @@ func spawn_rat_at_position(spawn_pos: Vector2) -> void:
 
 func get_nearest_rat(from_pos: Vector2) -> Node:
 	var rats := get_tree().get_nodes_in_group("rats")
-	var nearest := null
+	var nearest : Node = null
 	var nearest_distance := INF
 	for rat in rats:
 		var distance := from_pos.distance_to(rat.global_position)
