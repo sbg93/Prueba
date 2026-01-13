@@ -211,14 +211,20 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if pending_purchase.is_empty():
 			return
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			_clear_pending_purchase()
-			return
 		if event.button_index != MOUSE_BUTTON_LEFT:
 			return
 		if not playfield_rect.has_point(click_pos):
 			return
 		_place_pending_purchase(click_pos)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and not pending_purchase.is_empty():
+		var click_pos := get_viewport().get_mouse_position()
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			_clear_pending_purchase()
+			return
+		if event.button_index == MOUSE_BUTTON_LEFT and not playfield_rect.has_point(click_pos):
+			_clear_pending_purchase()
 
 func apply_click_damage(rat: Node) -> void:
 	if rat.has_method("take_damage"):
@@ -433,7 +439,11 @@ func _on_buy_torbellino_pressed() -> void:
 	_update_ui()
 
 func _place_pending_purchase(click_pos: Vector2) -> void:
-	gold -= pending_cost
+	var cost := _get_pending_purchase_cost()
+	if gold < cost:
+		_clear_pending_purchase()
+		return
+	gold -= cost
 	if pending_purchase == "nest":
 		_spawn_rat_nest(click_pos)
 		nest_count += 1
@@ -449,13 +459,18 @@ func _place_pending_purchase(click_pos: Vector2) -> void:
 	elif pending_purchase == "knight":
 		_spawn_knight(click_pos)
 		knight_count += 1
-	_clear_pending_purchase()
+	_refresh_pending_purchase()
 	_update_ui()
 
 func _clear_pending_purchase() -> void:
 	pending_purchase = ""
 	pending_cost = 0
 	placement_label.text = ""
+
+func _refresh_pending_purchase() -> void:
+	pending_cost = _get_pending_purchase_cost()
+	if gold < pending_cost:
+		_clear_pending_purchase()
 
 func _on_trash_pressed() -> void:
 	if pending_delete:
@@ -582,6 +597,19 @@ func _get_mage_cost() -> int:
 
 func _get_knight_cost() -> int:
 	return int(BASE_KNIGHT_COST * pow(KNIGHT_COST_MULTIPLIER, knight_count))
+
+func _get_pending_purchase_cost() -> int:
+	if pending_purchase == "nest":
+		return _get_nest_cost()
+	if pending_purchase == "goblin_nest":
+		return _get_goblin_nest_cost()
+	if pending_purchase == "soldier":
+		return _get_soldier_cost()
+	if pending_purchase == "mage":
+		return _get_mage_cost()
+	if pending_purchase == "knight":
+		return _get_knight_cost()
+	return 0
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
