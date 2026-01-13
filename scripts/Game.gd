@@ -15,6 +15,8 @@ const BASE_KNIGHT_ANABOLIZANTES_COST := 100
 const BASE_DOUBLE_FIREBALL_COST := 100
 const BASE_TORBELLINO_COST := 100
 const BASE_HAND_OF_GOD_COST := 100
+const STARTING_GOLD := 10
+const BASE_CLICK_DAMAGE := 1
 
 const NEST_COST_MULTIPLIER := 2
 const GOBLIN_NEST_COST_MULTIPLIER := 3
@@ -54,6 +56,7 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var menu_button: Button = $HUD/UIRoot/TopBar/TopBarContent/MenuButton
 @onready var options_menu: PanelContainer = $HUD/UIRoot/OptionsMenu
 @onready var close_menu_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/CloseMenuButton
+@onready var reincarnate_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/ReincarnateButton
 @onready var wizard_hat_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/WizardHatButton
 @onready var horse_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/HorseButton
 @onready var hand_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/HandButton
@@ -97,9 +100,9 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var torbellino_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoCountLabel
 @onready var torbellino_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoButton
 
-var gold := 100000000
+var gold := STARTING_GOLD
 var total_gold_earned := 0
-var click_damage := 1
+var click_damage := BASE_CLICK_DAMAGE
 var skill_points := 0
 var skill_point_goal := BASE_SKILL_POINT_GOAL
 var gold_since_last_skill_point := 0
@@ -131,6 +134,7 @@ var pending_cost := 0
 var pending_delete := false
 
 var option_skill_states: Dictionary = {}
+var permanent_option_skills: Dictionary = {}
 
 var _click_sound: AudioStreamPlayer2D
 var _click_stream: AudioStreamGenerator
@@ -153,6 +157,7 @@ func _ready() -> void:
 	trash_button.pressed.connect(_on_trash_pressed)
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	close_menu_button.pressed.connect(_on_close_menu_pressed)
+	reincarnate_button.pressed.connect(_on_reincarnate_pressed)
 	_setup_option_skills()
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	goblin_nest_button.pressed.connect(_on_buy_goblin_nest_pressed)
@@ -551,12 +556,23 @@ func _on_close_menu_pressed() -> void:
 	_reset_option_skills()
 	_hide_menu()
 
+func _on_reincarnate_pressed() -> void:
+	_commit_option_skills()
+	_hide_menu()
+	_reset_run_state()
+
 func _hide_menu() -> void:
 	if options_menu.visible:
 		options_menu.visible = false
 
 func _setup_option_skills() -> void:
 	option_skill_states = {
+		wizard_hat_button: false,
+		horse_button: false,
+		hand_button: false,
+		swirl_button: false
+	}
+	permanent_option_skills = {
 		wizard_hat_button: false,
 		horse_button: false,
 		hand_button: false,
@@ -577,6 +593,8 @@ func _on_option_skill_input(event: InputEvent, button: Button) -> void:
 func _try_activate_option_skill(button: Button) -> void:
 	if not option_skill_states.has(button):
 		return
+	if permanent_option_skills.get(button, false):
+		return
 	if option_skill_states[button]:
 		return
 	if skill_points <= 0:
@@ -589,6 +607,8 @@ func _try_activate_option_skill(button: Button) -> void:
 func _deactivate_option_skill(button: Button) -> void:
 	if not option_skill_states.has(button):
 		return
+	if permanent_option_skills.get(button, false):
+		return
 	if not option_skill_states[button]:
 		return
 	skill_points += 1
@@ -598,10 +618,19 @@ func _deactivate_option_skill(button: Button) -> void:
 
 func _reset_option_skills() -> void:
 	for button in option_skill_states.keys():
-		if option_skill_states[button]:
+		if option_skill_states[button] and not permanent_option_skills.get(button, false):
 			skill_points += 1
-		option_skill_states[button] = false
-		_set_option_skill_visual(button, false)
+			option_skill_states[button] = false
+		_set_option_skill_visual(button, option_skill_states[button])
+	_update_ui()
+
+func _commit_option_skills() -> void:
+	for button in option_skill_states.keys():
+		if option_skill_states[button]:
+			permanent_option_skills[button] = true
+		if permanent_option_skills.get(button, false):
+			option_skill_states[button] = true
+		_set_option_skill_visual(button, option_skill_states[button])
 	_update_ui()
 
 func _set_option_skill_visual(button: Button, active: bool) -> void:
@@ -610,6 +639,37 @@ func _set_option_skill_visual(button: Button, active: bool) -> void:
 func _clear_pending_delete() -> void:
 	pending_delete = false
 	placement_label.text = ""
+
+func _reset_run_state() -> void:
+	_clear_pending_purchase()
+	_clear_pending_delete()
+	for child in playfield.get_children():
+		child.queue_free()
+	gold = STARTING_GOLD
+	click_damage = BASE_CLICK_DAMAGE
+	nest_count = 0
+	goblin_nest_count = 0
+	soldier_count = 0
+	mage_count = 0
+	knight_count = 0
+	click_upgrade_count = 0
+	hand_of_god_count = 0
+	rat_steroids_count = 0
+	goblin_steroids_count = 0
+	soldier_steroids_count = 0
+	mage_steroids_count = 0
+	knight_steroids_count = 0
+	knight_anabolizantes_count = 0
+	rat_gold_bonus = 0
+	goblin_gold_bonus = 0
+	click_kill_gold_multiplier = 1.0
+	soldier_damage_bonus = 0
+	mage_range_multiplier = 1.0
+	knight_speed_multiplier = 1.0
+	knight_size_multiplier = 1.0
+	double_fireball_purchased = false
+	torbellino_purchased = false
+	_update_ui()
 
 func _find_deletable_target(click_pos: Vector2) -> Node2D:
 	var closest_target: Node2D = null
