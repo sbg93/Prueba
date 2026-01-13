@@ -66,7 +66,7 @@ func _play_attack_sound() -> void:
 			envelope = t / 0.04
 		elif t > 0.18:
 			envelope = max(0.0, (duration - t) / 0.07)
-		var sweep := lerp(700.0, 220.0, t / duration)
+		var sweep : Variant = lerp(700.0, 220.0, t / duration)
 		var flame := sin(2.0 * PI * sweep * t) * 0.5
 		var crackle := randf_range(-1.0, 1.0) * 0.3
 		var sample := (flame + crackle) * envelope * 0.6
