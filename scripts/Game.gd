@@ -57,6 +57,9 @@ var mage_range_bonus := 0.0
 var pending_purchase := ""
 var pending_cost := 0
 
+var _click_sound: AudioStreamPlayer2D
+var _click_stream: AudioStreamGenerator
+
 var rat_scene := preload("res://scenes/Rat.tscn")
 var green_rat_scene := preload("res://scenes/GreenRat.tscn")
 var nest_scene := preload("res://scenes/Nest.tscn")
@@ -75,6 +78,13 @@ func _ready() -> void:
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
 	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
+	_click_stream = AudioStreamGenerator.new()
+	_click_stream.mix_rate = 44100
+	_click_stream.buffer_length = 0.4
+	_click_sound = AudioStreamPlayer2D.new()
+	_click_sound.stream = _click_stream
+	_click_sound.volume_db = -3.0
+	add_child(_click_sound)
 	_update_ui()
 	_show_purchases()
 
@@ -110,6 +120,7 @@ func _apply_click_damage_at(click_pos: Vector2) -> void:
 		var collider : Variant = hit.get("collider")
 		if collider is Node and collider.is_in_group("rats"):
 			apply_click_damage(collider)
+			_play_click_sound(click_pos)
 			return
 
 func spawn_rat_at_position(spawn_pos: Vector2, is_green: bool = false) -> Node:
@@ -305,6 +316,29 @@ func _update_mage_stats() -> void:
 			mage.attack_damage = BASE_MAGE_DAMAGE + mage_damage_bonus
 		if "attack_range" in mage:
 			mage.attack_range = BASE_MAGE_RANGE + mage_range_bonus
+
+func _play_click_sound(click_pos: Vector2) -> void:
+	if _click_sound == null or _click_stream == null:
+		return
+	_click_sound.global_position = click_pos
+	_click_sound.play()
+	var playback := _click_sound.get_stream_playback() as AudioStreamGeneratorPlayback
+	if playback == null:
+		return
+	var sample_rate := _click_stream.mix_rate
+	var duration := 0.35
+	var sample_count := int(sample_rate * duration)
+	for i in range(sample_count):
+		var t := float(i) / float(sample_rate)
+		var envelope := 1.0
+		if t < 0.03:
+			envelope = t / 0.03
+		elif t > 0.2:
+			envelope = max(0.0, (duration - t) / 0.15)
+		var rumble := sin(2.0 * PI * 80.0 * t) * 0.6
+		var crack := randf_range(-1.0, 1.0) * 0.25
+		var sample := (rumble + crack) * envelope * 0.7
+		playback.push_frame(Vector2(sample, sample))
 
 func _format_cost(cost: int) -> String:
 	return "Coste: %d" % cost
