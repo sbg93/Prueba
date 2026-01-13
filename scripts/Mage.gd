@@ -27,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	if game == null:
 		return
 	if not _is_target_valid(_current_target):
-		_current_target = game.get_random_near_rat(global_position) as Node2D
+		_current_target = game.get_random_near_enemy(global_position) as Node2D
 	if _current_target == null:
 		return
 	var target_pos: Vector2 = _current_target.global_position

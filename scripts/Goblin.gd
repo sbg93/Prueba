@@ -2,12 +2,13 @@ extends Area2D
 
 signal died(gold_value: int, enemy_kind: String)
 
-@export var max_health := 5
-@export var move_speed := 20.0
-@export var direction_change_range := Vector2(1.5, 3.5)
-@export var gold_value := 1
+@export var max_health := 10
+@export var move_speed := 120.0
+@export var direction_change_range := Vector2(0.8, 1.6)
+@export var gold_value := 10
+@export var flee_distance := 200.0
 
-var health := 5
+var health := 10
 var game: Node
 var _direction := Vector2.ZERO
 var _direction_timer := 0.0
@@ -15,14 +16,17 @@ var _next_direction_change := 0.0
 
 func _ready() -> void:
 	health = max_health
-	add_to_group("rats")
+	add_to_group("goblins")
 	add_to_group("enemies")
 	_set_random_direction()
 	_schedule_direction_change()
 
 func _process(delta: float) -> void:
 	_direction_timer += delta
-	if _direction_timer >= _next_direction_change:
+	var flee_direction := _get_flee_direction()
+	if flee_direction != Vector2.ZERO:
+		_direction = flee_direction
+	elif _direction_timer >= _next_direction_change:
 		_direction_timer = 0.0
 		_set_random_direction()
 		_schedule_direction_change()
@@ -36,8 +40,19 @@ func _process(delta: float) -> void:
 func take_damage(amount: int) -> void:
 	health = max(health - amount, 0)
 	if health == 0:
-		died.emit(gold_value, "rat")
+		died.emit(gold_value, "goblin")
 		queue_free()
+
+func _get_flee_direction() -> Vector2:
+	if game == null:
+		return Vector2.ZERO
+	var target := game.get_random_near_player_unit(global_position)
+	if target == null:
+		return Vector2.ZERO
+	var target_pos: Vector2 = target.global_position
+	if global_position.distance_to(target_pos) > flee_distance:
+		return Vector2.ZERO
+	return (global_position - target_pos).normalized()
 
 func _set_random_direction() -> void:
 	_direction = Vector2.from_angle(randf_range(0.0, TAU))

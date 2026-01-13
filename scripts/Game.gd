@@ -1,18 +1,22 @@
 extends Node2D
 
 const BASE_NEST_COST := 5
+const BASE_GOBLIN_NEST_COST := 20
 const BASE_SOLDIER_COST := 5
 const BASE_MAGE_COST := 20
 const BASE_CLICK_UPGRADE_COST := 5
 const BASE_RAT_STEROIDS_COST := 5
+const BASE_GOBLIN_STEROIDS_COST := 20
 const BASE_SOLDIER_STEROIDS_COST := 5
 const BASE_MAGE_STEROIDS_COST := 20
 
 const NEST_COST_MULTIPLIER := 2
+const GOBLIN_NEST_COST_MULTIPLIER := 3
 const SOLDIER_COST_MULTIPLIER := 2
 const MAGE_COST_MULTIPLIER := 2
 const CLICK_UPGRADE_MULTIPLIER := 2
 const RAT_STEROIDS_MULTIPLIER := 2
+const GOBLIN_STEROIDS_MULTIPLIER := 3
 const SOLDIER_STEROIDS_MULTIPLIER := 2
 const MAGE_STEROIDS_MULTIPLIER := 2
 
@@ -35,23 +39,28 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var purchases_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList
 @onready var upgrades_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList
 @onready var rat_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow/RatNestBuyButton
+@onready var goblin_nest_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow/GoblinNestBuyButton
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
 @onready var mage_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
+@onready var goblin_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsButton
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
 @onready var mage_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsButton
 
 var gold := 1000
 var click_damage := 1
 var nest_count := 0
+var goblin_nest_count := 0
 var soldier_count := 0
 var mage_count := 0
 var click_upgrade_count := 0
 var rat_steroids_count := 0
+var goblin_steroids_count := 0
 var soldier_steroids_count := 0
 var mage_steroids_count := 0
 var rat_gold_bonus := 0
+var goblin_gold_bonus := 0
 var soldier_damage_bonus := 0
 var mage_damage_bonus := 0
 var mage_range_bonus := 0.0
@@ -66,6 +75,8 @@ var _click_stream: AudioStreamGenerator
 var rat_scene := preload("res://scenes/Rat.tscn")
 var green_rat_scene := preload("res://scenes/GreenRat.tscn")
 var nest_scene := preload("res://scenes/Nest.tscn")
+var goblin_scene := preload("res://scenes/Goblin.tscn")
+var goblin_nest_scene := preload("res://scenes/GoblinNest.tscn")
 var soldier_scene := preload("res://scenes/Soldier.tscn")
 var mage_scene := preload("res://scenes/Mage.tscn")
 
@@ -76,10 +87,12 @@ func _ready() -> void:
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	trash_button.pressed.connect(_on_trash_pressed)
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
+	goblin_nest_button.pressed.connect(_on_buy_goblin_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
 	mage_button.pressed.connect(_on_buy_mage_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
+	goblin_steroids_button.pressed.connect(_on_buy_goblin_steroids_pressed)
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
 	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
 	_click_stream = AudioStreamGenerator.new()
@@ -137,7 +150,7 @@ func _apply_click_damage_at(click_pos: Vector2) -> void:
 	var hits := space_state.intersect_point(params, 32)
 	for hit in hits:
 		var collider : Variant = hit.get("collider")
-		if collider is Node and collider.is_in_group("rats"):
+		if collider is Node and collider.is_in_group("enemies"):
 			apply_click_damage(collider)
 			_play_click_sound(click_pos)
 			return
@@ -148,28 +161,56 @@ func spawn_rat_at_position(spawn_pos: Vector2, is_green: bool = false) -> Node:
 	rat.position = spawn_pos
 	rat.game = self
 	playfield.add_child(rat)
-	rat.died.connect(_on_rat_died)
+	rat.died.connect(_on_enemy_died)
 	return rat
 
-func get_random_near_rat(from_pos: Vector2, candidates_count: int = 3) -> Node:
-	var rats := get_tree().get_nodes_in_group("rats")
-	if rats.is_empty():
+func spawn_goblin_at_position(spawn_pos: Vector2) -> Node:
+	var goblin := goblin_scene.instantiate()
+	goblin.position = spawn_pos
+	goblin.game = self
+	playfield.add_child(goblin)
+	goblin.died.connect(_on_enemy_died)
+	return goblin
+
+func get_random_near_enemy(from_pos: Vector2, candidates_count: int = 3) -> Node:
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	if enemies.is_empty():
 		return null
 	var candidates: Array[Dictionary] = []
-	for rat in rats:
+	for enemy in enemies:
 		candidates.append({
-			"rat": rat,
-			"distance": from_pos.distance_to(rat.global_position)
+			"enemy": enemy,
+			"distance": from_pos.distance_to(enemy.global_position)
 		})
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return a["distance"] < b["distance"]
 	)
 	var max_candidates : Variant = min(candidates_count, candidates.size())
 	var choice_index := randi_range(0, max_candidates - 1)
-	return candidates[choice_index]["rat"]
+	return candidates[choice_index]["enemy"]
 
-func _on_rat_died(gold_value: int) -> void:
-	gold += gold_value + rat_gold_bonus
+func get_random_near_player_unit(from_pos: Vector2, candidates_count: int = 3) -> Node:
+	var candidates: Array[Dictionary] = []
+	for group_name in ["soldiers", "mages", "nests", "goblin_nests"]:
+		for unit in get_tree().get_nodes_in_group(group_name):
+			candidates.append({
+				"unit": unit,
+				"distance": from_pos.distance_to(unit.global_position)
+			})
+	if candidates.is_empty():
+		return null
+	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return a["distance"] < b["distance"]
+	)
+	var max_candidates : Variant = min(candidates_count, candidates.size())
+	var choice_index := randi_range(0, max_candidates - 1)
+	return candidates[choice_index]["unit"]
+
+func _on_enemy_died(gold_value: int, enemy_kind: String) -> void:
+	if enemy_kind == "goblin":
+		gold += gold_value + goblin_gold_bonus
+	else:
+		gold += gold_value + rat_gold_bonus
 	_update_ui()
 
 func _on_purchases_tab_pressed() -> void:
@@ -194,6 +235,15 @@ func _on_buy_rat_nest_pressed() -> void:
 	pending_purchase = "nest"
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde colocar el nido de ratas."
+
+func _on_buy_goblin_nest_pressed() -> void:
+	var cost := _get_goblin_nest_cost()
+	if gold < cost:
+		return
+	_clear_pending_delete()
+	pending_purchase = "goblin_nest"
+	pending_cost = cost
+	placement_label.text = "Selecciona dónde colocar el nido de goblins."
 
 func _on_buy_soldier_pressed() -> void:
 	var cost := _get_soldier_cost()
@@ -231,6 +281,15 @@ func _on_buy_rat_steroids_pressed() -> void:
 	rat_gold_bonus += 1
 	_update_ui()
 
+func _on_buy_goblin_steroids_pressed() -> void:
+	var cost := _get_goblin_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	goblin_steroids_count += 1
+	goblin_gold_bonus += 5
+	_update_ui()
+
 func _on_buy_soldier_steroids_pressed() -> void:
 	var cost := _get_soldier_steroids_cost()
 	if gold < cost:
@@ -255,8 +314,11 @@ func _on_buy_mage_steroids_pressed() -> void:
 func _place_pending_purchase(click_pos: Vector2) -> void:
 	gold -= pending_cost
 	if pending_purchase == "nest":
-		_spawn_nest(click_pos)
+		_spawn_rat_nest(click_pos)
 		nest_count += 1
+	elif pending_purchase == "goblin_nest":
+		_spawn_goblin_nest(click_pos)
+		goblin_nest_count += 1
 	elif pending_purchase == "soldier":
 		_spawn_soldier(click_pos)
 		soldier_count += 1
@@ -287,7 +349,7 @@ func _clear_pending_delete() -> void:
 func _find_deletable_target(click_pos: Vector2) -> Node2D:
 	var closest_target: Node2D = null
 	var closest_distance := DELETE_SELECT_RADIUS
-	for group_name in ["nests", "soldiers", "mages"]:
+	for group_name in ["nests", "goblin_nests", "soldiers", "mages"]:
 		for unit in get_tree().get_nodes_in_group(group_name):
 			if unit is Node2D:
 				var distance := click_pos.distance_to(unit.global_position)
@@ -299,6 +361,8 @@ func _find_deletable_target(click_pos: Vector2) -> Node2D:
 func _delete_unit(unit: Node2D) -> void:
 	if unit.is_in_group("nests"):
 		nest_count = max(nest_count - 1, 0)
+	elif unit.is_in_group("goblin_nests"):
+		goblin_nest_count = max(goblin_nest_count - 1, 0)
 	elif unit.is_in_group("soldiers"):
 		soldier_count = max(soldier_count - 1, 0)
 	elif unit.is_in_group("mages"):
@@ -306,8 +370,14 @@ func _delete_unit(unit: Node2D) -> void:
 	unit.queue_free()
 	_update_ui()
 
-func _spawn_nest(spawn_pos: Vector2) -> void:
+func _spawn_rat_nest(spawn_pos: Vector2) -> void:
 	var nest := nest_scene.instantiate()
+	nest.position = spawn_pos
+	nest.game = self
+	playfield.add_child(nest)
+
+func _spawn_goblin_nest(spawn_pos: Vector2) -> void:
+	var nest := goblin_nest_scene.instantiate()
 	nest.position = spawn_pos
 	nest.game = self
 	playfield.add_child(nest)
@@ -334,15 +404,20 @@ func _update_ui() -> void:
 	gold_label.text = "🪙 %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
 	rat_nest_button.text = _format_cost(_get_nest_cost())
+	goblin_nest_button.text = _format_cost(_get_goblin_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
 	mage_button.text = _format_cost(_get_mage_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
 	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
+	goblin_steroids_button.text = _format_cost(_get_goblin_steroids_cost())
 	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
 	mage_steroids_button.text = _format_cost(_get_mage_steroids_cost())
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
+
+func _get_goblin_nest_cost() -> int:
+	return int(BASE_GOBLIN_NEST_COST * pow(GOBLIN_NEST_COST_MULTIPLIER, goblin_nest_count))
 
 func _get_soldier_cost() -> int:
 	return int(BASE_SOLDIER_COST * pow(SOLDIER_COST_MULTIPLIER, soldier_count))
@@ -355,6 +430,9 @@ func _get_click_upgrade_cost() -> int:
 
 func _get_rat_steroids_cost() -> int:
 	return int(BASE_RAT_STEROIDS_COST * pow(RAT_STEROIDS_MULTIPLIER, rat_steroids_count))
+
+func _get_goblin_steroids_cost() -> int:
+	return int(BASE_GOBLIN_STEROIDS_COST * pow(GOBLIN_STEROIDS_MULTIPLIER, goblin_steroids_count))
 
 func _get_soldier_steroids_cost() -> int:
 	return int(BASE_SOLDIER_STEROIDS_COST * pow(SOLDIER_STEROIDS_MULTIPLIER, soldier_steroids_count))

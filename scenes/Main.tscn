@@ -234,6 +234,26 @@ theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 text = "5"
 
+[node name="GoblinNestRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
+layout_mode = 2
+
+[node name="GoblinNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Nido de goblins"
+
+[node name="GoblinNestBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "20"
+
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
@@ -317,6 +337,26 @@ theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 text = "5"
+
+[node name="GoblinSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
+layout_mode = 2
+
+[node name="GoblinSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Esteroides de goblin"
+
+[node name="GoblinSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "20"
 
 [node name="SoldierSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
