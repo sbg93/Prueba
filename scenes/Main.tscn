@@ -108,9 +108,10 @@ script = ExtResource("1")
 
 [node name="PlayfieldBackdrop" type="Polygon2D" parent="."]
 position = Vector2(40, 80)
+scale = Vector2(0.98892665, 1.2544353)
 color = Color(0.9142615, 0.80868244, 0.77961755, 1)
 texture = ExtResource("2_rvslj")
-polygon = PackedVector2Array(0, 0, 620, 0, 620, 440, 0, 440)
+polygon = PackedVector2Array(0, 0, 1529.9414, 4.549713, 1529.9414, 776.6783, 759.42896, 776.67834, 307.32642, 776.67834, 0, 781.228)
 
 [node name="Playfield" type="Node2D" parent="."]
 
@@ -131,7 +132,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_left = 47.0
 offset_top = 16.0
-offset_right = -306.0
+offset_right = -374.0
 offset_bottom = 70.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("1")
@@ -175,8 +176,8 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = 20.0
+offset_left = -358.0
+offset_top = 12.0
 offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 0
@@ -220,150 +221,150 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="RatNestCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="RatNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Genera ratas enemigas periódicamente para ganar oro al derrotarlas."
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Genera ratas enemigas periódicamente para ganar oro al derrotarlas."
 text = "Nido de ratas"
 
 [node name="RatNestBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/RatNestRow"]
 layout_mode = 2
+tooltip_text = "Genera ratas enemigas periódicamente para ganar oro al derrotarlas."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Genera ratas enemigas periódicamente para ganar oro al derrotarlas."
 text = "5"
 
 [node name="GoblinNestRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
 [node name="GoblinNestCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="GoblinNestLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Genera goblins enemigos periódicamente para ganar más oro al derrotarlos."
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Genera goblins enemigos periódicamente para ganar más oro al derrotarlos."
 text = "Nido de goblins"
 
 [node name="GoblinNestBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/GoblinNestRow"]
 layout_mode = 2
+tooltip_text = "Genera goblins enemigos periódicamente para ganar más oro al derrotarlos."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Genera goblins enemigos periódicamente para ganar más oro al derrotarlos."
 text = "20"
 
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
 [node name="SoldierCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="SoldierLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Despliega un soldado aliado cuerpo a cuerpo que ataca a los enemigos cercanos."
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Despliega un soldado aliado cuerpo a cuerpo que ataca a los enemigos cercanos."
 text = "Soldado"
 
 [node name="SoldierBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow"]
 layout_mode = 2
+tooltip_text = "Despliega un soldado aliado cuerpo a cuerpo que ataca a los enemigos cercanos."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Despliega un soldado aliado cuerpo a cuerpo que ataca a los enemigos cercanos."
 text = "5"
 
 [node name="MageRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
 [node name="MageCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="MageLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Despliega un mago aliado a distancia que lanza ataques mágicos."
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Despliega un mago aliado a distancia que lanza ataques mágicos."
 text = "Mago"
 
 [node name="MageBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow"]
 layout_mode = 2
+tooltip_text = "Despliega un mago aliado a distancia que lanza ataques mágicos."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Despliega un mago aliado a distancia que lanza ataques mágicos."
 text = "20"
 
 [node name="KnightRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
 [node name="KnightCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="KnightLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Despliega un caballero aliado resistente para apoyar en combate."
 theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Despliega un caballero aliado resistente para apoyar en combate."
 text = "Caballero"
 
 [node name="KnightBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow"]
 layout_mode = 2
+tooltip_text = "Despliega un caballero aliado resistente para apoyar en combate."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Despliega un caballero aliado resistente para apoyar en combate."
 text = "100"
 
 [node name="UpgradesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
@@ -374,148 +375,148 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="ClickUpgradeCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="ClickUpgradeLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Aumenta el daño de tus clics en +1."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Aumenta el daño de tus clics en +1."
 text = "Mejora de click"
 
 [node name="ClickUpgradeButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow"]
 layout_mode = 2
+tooltip_text = "Aumenta el daño de tus clics en +1."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Aumenta el daño de tus clics en +1."
 text = "5"
 
 [node name="RatSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
 [node name="RatSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="RatSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Aumenta el oro recibido por cada rata derrotada en +1."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Aumenta el oro recibido por cada rata derrotada en +1."
 text = "Esteroides de rata"
 
 [node name="RatSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow"]
 layout_mode = 2
+tooltip_text = "Aumenta el oro recibido por cada rata derrotada en +1."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Aumenta el oro recibido por cada rata derrotada en +1."
 text = "5"
 
 [node name="GoblinSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
 [node name="GoblinSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="GoblinSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Aumenta el oro recibido por cada goblin derrotado en +5."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Aumenta el oro recibido por cada goblin derrotado en +5."
 text = "Esteroides de goblin"
 
 [node name="GoblinSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow"]
 layout_mode = 2
+tooltip_text = "Aumenta el oro recibido por cada goblin derrotado en +5."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Aumenta el oro recibido por cada goblin derrotado en +5."
 text = "20"
 
 [node name="SoldierSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
 [node name="SoldierSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="SoldierSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Aumenta el daño de los soldados aliados en +1."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Aumenta el daño de los soldados aliados en +1."
 text = "Esteroides de soldado"
 
 [node name="SoldierSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow"]
 layout_mode = 2
+tooltip_text = "Aumenta el daño de los soldados aliados en +1."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Aumenta el daño de los soldados aliados en +1."
 text = "5"
 
 [node name="MageSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
 [node name="MageSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
-layout_mode = 2
 custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
 [node name="MageSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
-tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
 text = "Esteroides de mago"
 
 [node name="MageSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
+tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
 theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
-tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
 text = "20"
