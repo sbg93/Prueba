@@ -5,7 +5,7 @@ signal died(gold_value: int, enemy_kind: String, killed_by_click: bool)
 @export var max_health := 5
 @export var move_speed := 20.0
 @export var direction_change_range := Vector2(1.5, 3.5)
-@export var gold_value := 1
+@export var gold_value := 10000
 
 var health := 5
 var game: Node
