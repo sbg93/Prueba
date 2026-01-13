@@ -54,6 +54,10 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var menu_button: Button = $HUD/UIRoot/TopBar/TopBarContent/MenuButton
 @onready var options_menu: PanelContainer = $HUD/UIRoot/OptionsMenu
 @onready var close_menu_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/CloseMenuButton
+@onready var wizard_hat_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/WizardHatButton
+@onready var horse_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/HorseButton
+@onready var hand_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/HandButton
+@onready var swirl_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/OptionsGrid/SwirlButton
 @onready var purchases_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/PurchasesTabButton
 @onready var upgrades_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/UpgradesTabButton
 @onready var purchases_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList
@@ -126,6 +130,8 @@ var pending_purchase := ""
 var pending_cost := 0
 var pending_delete := false
 
+var option_skill_states: Dictionary = {}
+
 var _click_sound: AudioStreamPlayer2D
 var _click_stream: AudioStreamGenerator
 
@@ -147,6 +153,7 @@ func _ready() -> void:
 	trash_button.pressed.connect(_on_trash_pressed)
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	close_menu_button.pressed.connect(_on_close_menu_pressed)
+	_setup_option_skills()
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	goblin_nest_button.pressed.connect(_on_buy_goblin_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
@@ -541,11 +548,64 @@ func _on_menu_button_pressed() -> void:
 	options_menu.visible = not options_menu.visible
 
 func _on_close_menu_pressed() -> void:
+	_reset_option_skills()
 	_hide_menu()
 
 func _hide_menu() -> void:
 	if options_menu.visible:
 		options_menu.visible = false
+
+func _setup_option_skills() -> void:
+	option_skill_states = {
+		wizard_hat_button: false,
+		horse_button: false,
+		hand_button: false,
+		swirl_button: false
+	}
+	for button in option_skill_states.keys():
+		if button is Button:
+			button.gui_input.connect(_on_option_skill_input.bind(button))
+			_set_option_skill_visual(button, false)
+
+func _on_option_skill_input(event: InputEvent, button: Button) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_try_activate_option_skill(button)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_deactivate_option_skill(button)
+
+func _try_activate_option_skill(button: Button) -> void:
+	if not option_skill_states.has(button):
+		return
+	if option_skill_states[button]:
+		return
+	if skill_points <= 0:
+		return
+	skill_points -= 1
+	option_skill_states[button] = true
+	_set_option_skill_visual(button, true)
+	_update_ui()
+
+func _deactivate_option_skill(button: Button) -> void:
+	if not option_skill_states.has(button):
+		return
+	if not option_skill_states[button]:
+		return
+	skill_points += 1
+	option_skill_states[button] = false
+	_set_option_skill_visual(button, false)
+	_update_ui()
+
+func _reset_option_skills() -> void:
+	for button in option_skill_states.keys():
+		if option_skill_states[button]:
+			skill_points += 1
+		option_skill_states[button] = false
+		_set_option_skill_visual(button, false)
+	_update_ui()
+
+func _set_option_skill_visual(button: Button, active: bool) -> void:
+	button.modulate = Color(1, 1, 1, 1) if active else Color(0.55, 0.55, 0.6, 1)
 
 func _clear_pending_delete() -> void:
 	pending_delete = false
