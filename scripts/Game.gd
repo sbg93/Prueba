@@ -331,7 +331,7 @@ func _spawn_mage(spawn_pos: Vector2) -> void:
 	playfield.add_child(mage)
 
 func _update_ui() -> void:
-	gold_label.text = "Oro: %d" % gold
+	gold_label.text = "🪙 %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
 	rat_nest_button.text = _format_cost(_get_nest_cost())
 	soldier_button.text = _format_cost(_get_soldier_cost())
