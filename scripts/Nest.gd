@@ -15,6 +15,9 @@ func _process(delta: float) -> void:
 		_timer = 0.0
 		_spawn_rat()
 
+func _ready() -> void:
+	add_to_group("nests")
+
 func _spawn_rat() -> void:
 	if game == null:
 		return

@@ -21,6 +21,7 @@ const BASE_SOLDIER_DAMAGE := 1
 const BASE_MAGE_DAMAGE := 3
 const BASE_MAGE_RANGE := 120.0
 const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
+const DELETE_SELECT_RADIUS := 26.0
 
 @export var playfield_rect := Rect2(Vector2(40, 80), Vector2(620, 440))
 
@@ -28,6 +29,7 @@ const MAGE_RANGE_BONUS_PER_UPGRADE := 6.0
 @onready var gold_label: Label = $HUD/UIRoot/TopBar/TopBarContent/GoldLabel
 @onready var click_damage_label: Label = $HUD/UIRoot/TopBar/TopBarContent/ClickDamageLabel
 @onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
+@onready var trash_button: Button = $HUD/UIRoot/TopBar/TopBarContent/TrashButton
 @onready var purchases_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/PurchasesTabButton
 @onready var upgrades_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/UpgradesTabButton
 @onready var purchases_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList
@@ -56,6 +58,7 @@ var mage_range_bonus := 0.0
 
 var pending_purchase := ""
 var pending_cost := 0
+var pending_delete := false
 
 var _click_sound: AudioStreamPlayer2D
 var _click_stream: AudioStreamGenerator
@@ -71,6 +74,7 @@ func _ready() -> void:
 	randomize()
 	purchases_tab_button.pressed.connect(_on_purchases_tab_pressed)
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
+	trash_button.pressed.connect(_on_trash_pressed)
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
 	mage_button.pressed.connect(_on_buy_mage_pressed)
@@ -91,6 +95,21 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		var click_pos := get_viewport().get_mouse_position()
+		if pending_delete:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				_clear_pending_delete()
+				return
+			if event.button_index != MOUSE_BUTTON_LEFT:
+				return
+			if not playfield_rect.has_point(click_pos):
+				return
+			var target := _find_deletable_target(click_pos)
+			if target == null:
+				placement_label.text = "Selecciona una unidad comprada para eliminar."
+				return
+			_delete_unit(target)
+			_clear_pending_delete()
+			return
 		if event.button_index == MOUSE_BUTTON_LEFT and pending_purchase.is_empty():
 			if playfield_rect.has_point(click_pos):
 				_apply_click_damage_at(click_pos)
@@ -171,6 +190,7 @@ func _on_buy_rat_nest_pressed() -> void:
 	var cost := _get_nest_cost()
 	if gold < cost:
 		return
+	_clear_pending_delete()
 	pending_purchase = "nest"
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde colocar el nido de ratas."
@@ -179,6 +199,7 @@ func _on_buy_soldier_pressed() -> void:
 	var cost := _get_soldier_cost()
 	if gold < cost:
 		return
+	_clear_pending_delete()
 	pending_purchase = "soldier"
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde desplegar el soldado."
@@ -187,6 +208,7 @@ func _on_buy_mage_pressed() -> void:
 	var cost := _get_mage_cost()
 	if gold < cost:
 		return
+	_clear_pending_delete()
 	pending_purchase = "mage"
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde desplegar el mago."
@@ -248,6 +270,41 @@ func _clear_pending_purchase() -> void:
 	pending_purchase = ""
 	pending_cost = 0
 	placement_label.text = ""
+
+func _on_trash_pressed() -> void:
+	if pending_delete:
+		_clear_pending_delete()
+		return
+	if not pending_purchase.is_empty():
+		_clear_pending_purchase()
+	pending_delete = true
+	placement_label.text = "Selecciona la unidad que quieres eliminar."
+
+func _clear_pending_delete() -> void:
+	pending_delete = false
+	placement_label.text = ""
+
+func _find_deletable_target(click_pos: Vector2) -> Node2D:
+	var closest_target: Node2D = null
+	var closest_distance := DELETE_SELECT_RADIUS
+	for group_name in ["nests", "soldiers", "mages"]:
+		for unit in get_tree().get_nodes_in_group(group_name):
+			if unit is Node2D:
+				var distance := click_pos.distance_to(unit.global_position)
+				if distance <= closest_distance:
+					closest_distance = distance
+					closest_target = unit
+	return closest_target
+
+func _delete_unit(unit: Node2D) -> void:
+	if unit.is_in_group("nests"):
+		nest_count = max(nest_count - 1, 0)
+	elif unit.is_in_group("soldiers"):
+		soldier_count = max(soldier_count - 1, 0)
+	elif unit.is_in_group("mages"):
+		mage_count = max(mage_count - 1, 0)
+	unit.queue_free()
+	_update_ui()
 
 func _spawn_nest(spawn_pos: Vector2) -> void:
 	var nest := nest_scene.instantiate()
