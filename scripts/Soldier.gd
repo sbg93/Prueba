@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	_attack_timer += delta
 	if game == null:
 		return
-	var target: Node2D = game.get_nearest_rat(global_position) as Node2D
+	var target: Node2D = game.get_random_near_rat(global_position) as Node2D
 	if target == null:
 		return
 	var target_pos: Vector2 = target.global_position
