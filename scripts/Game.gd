@@ -77,7 +77,7 @@ func _apply_click_damage_at(click_pos: Vector2) -> void:
 	params.collide_with_areas = true
 	var hits := space_state.intersect_point(params, 32)
 	for hit in hits:
-		var collider := hit.get("collider")
+		var collider : Variant = hit.get("collider")
 		if collider is Node and collider.is_in_group("rats"):
 			apply_click_damage(collider)
 			return
