@@ -111,7 +111,7 @@ var knight_scene := preload("res://scenes/Knight.tscn")
 func _ready() -> void:
 	add_to_group("game")
 	randomize()
-	playfield_rect = _get_playfield_backdrop_rect()
+	playfield_rect = _get_playfield_backdrop_rect(playfield_backdrop)
 	purchases_tab_button.pressed.connect(_on_purchases_tab_pressed)
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	trash_button.pressed.connect(_on_trash_pressed)
@@ -136,26 +136,50 @@ func _ready() -> void:
 	add_child(_click_sound)
 	_update_ui()
 	_show_purchases()
+	
+func polygon_local_rect(poly: Polygon2D) -> Rect2:
+	var points := poly.polygon
+	if points.is_empty():
+		return Rect2()
 
-func _get_playfield_backdrop_rect() -> Rect2:
-	var local_rect := playfield_backdrop.get_item_rect()
-	var transform := playfield_backdrop.get_global_transform()
+	var min_v := points[0]
+	var max_v := points[0]
+
+	for p in points:
+		min_v = min_v.min(p)
+		max_v = max_v.max(p)
+
+	return Rect2(min_v, max_v - min_v)
+
+func _get_playfield_backdrop_rect(poly: Polygon2D) -> Rect2:
+	var local_rect := polygon_local_rect(poly)
+	if local_rect.size == Vector2.ZERO:
+		return Rect2()
+
+	var t := poly.global_transform
+
 	var corners := [
-		transform.xform(local_rect.position),
-		transform.xform(local_rect.position + Vector2(local_rect.size.x, 0.0)),
-		transform.xform(local_rect.position + Vector2(0.0, local_rect.size.y)),
-		transform.xform(local_rect.position + local_rect.size)
+		t * local_rect.position,
+		t * (local_rect.position + Vector2(local_rect.size.x, 0)),
+		t * (local_rect.position + Vector2(0, local_rect.size.y)),
+		t * (local_rect.position + local_rect.size)
 	]
-	var min_x := corners[0].x
-	var max_x := corners[0].x
-	var min_y := corners[0].y
-	var max_y := corners[0].y
-	for corner in corners:
-		min_x = min(min_x, corner.x)
-		max_x = max(max_x, corner.x)
-		min_y = min(min_y, corner.y)
-		max_y = max(max_y, corner.y)
-	return Rect2(Vector2(min_x, min_y), Vector2(max_x - min_x, max_y - min_y))
+
+	var min_x : Variant = corners[0].x
+	var max_x : Variant = corners[0].x
+	var min_y : Variant = corners[0].y
+	var max_y : Variant = corners[0].y
+
+	for c in corners:
+		min_x = min(min_x, c.x)
+		max_x = max(max_x, c.x)
+		min_y = min(min_y, c.y)
+		max_y = max(max_y, c.y)
+
+	return Rect2(
+		Vector2(min_x, min_y),
+		Vector2(max_x - min_x, max_y - min_y)
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
