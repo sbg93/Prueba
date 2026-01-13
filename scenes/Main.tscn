@@ -401,6 +401,36 @@ theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 text = "5"
 
+[node name="HandOfGodRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
+layout_mode = 2
+
+[node name="HandOfGodCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="HandOfGodLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Aumenta en un 50% el oro obtenido por muertes con clic."
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Mano de dios"
+
+[node name="HandOfGodButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow"]
+layout_mode = 2
+tooltip_text = "Aumenta en un 50% el oro obtenido por muertes con clic."
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "100"
+
 [node name="RatSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
 layout_mode = 2
 
