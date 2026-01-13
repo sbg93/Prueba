@@ -1,6 +1,6 @@
 extends Area2D
 
-signal died(gold_value: int, enemy_kind: String)
+signal died(gold_value: int, enemy_kind: String, killed_by_click: bool)
 
 @export var max_health := 10
 @export var move_speed := 120.0
@@ -37,10 +37,10 @@ func _process(delta: float) -> void:
 	if game != null and "playfield_rect" in game:
 		_keep_inside_playfield(game.playfield_rect)
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, source: String = "unit") -> void:
 	health = max(health - amount, 0)
 	if health == 0:
-		died.emit(gold_value, "goblin")
+		died.emit(gold_value, "goblin", source == "click")
 		queue_free()
 
 func _get_flee_direction() -> Vector2:

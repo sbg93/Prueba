@@ -32,5 +32,5 @@ func _spawn_goblin() -> void:
 		_active_goblins += 1
 		goblin.died.connect(_on_goblin_died)
 
-func _on_goblin_died(_gold_value: int, _enemy_kind: String) -> void:
+func _on_goblin_died(_gold_value: int, _enemy_kind: String, _killed_by_click: bool) -> void:
 	_active_goblins = max(_active_goblins - 1, 0)

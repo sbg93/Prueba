@@ -13,6 +13,7 @@ const BASE_MAGE_STEROIDS_COST := 20
 const BASE_KNIGHT_STEROIDS_COST := 50
 const BASE_DOUBLE_FIREBALL_COST := 100
 const BASE_TORBELLINO_COST := 100
+const BASE_HAND_OF_GOD_COST := 100
 
 const NEST_COST_MULTIPLIER := 2
 const GOBLIN_NEST_COST_MULTIPLIER := 3
@@ -25,6 +26,7 @@ const GOBLIN_STEROIDS_MULTIPLIER := 3
 const SOLDIER_STEROIDS_MULTIPLIER := 2
 const MAGE_STEROIDS_MULTIPLIER := 2
 const KNIGHT_STEROIDS_MULTIPLIER := 2
+const HAND_OF_GOD_MULTIPLIER := 2
 
 const BASE_RAT_GOLD_VALUE := 1
 const BASE_SOLDIER_DAMAGE := 1
@@ -52,6 +54,8 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var mage_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageCountLabel
 @onready var knight_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightCountLabel
 @onready var click_upgrade_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeCountLabel
+@onready var hand_of_god_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow
+@onready var hand_of_god_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow/HandOfGodCountLabel
 @onready var rat_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsCountLabel
 @onready var goblin_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsCountLabel
 @onready var soldier_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsCountLabel
@@ -63,6 +67,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var mage_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageBuyButton
 @onready var knight_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
+@onready var hand_of_god_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow/HandOfGodButton
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
 @onready var goblin_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/GoblinSteroidsRow/GoblinSteroidsButton
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
@@ -83,6 +88,7 @@ var soldier_count := 0
 var mage_count := 0
 var knight_count := 0
 var click_upgrade_count := 0
+var hand_of_god_count := 0
 var rat_steroids_count := 0
 var goblin_steroids_count := 0
 var soldier_steroids_count := 0
@@ -90,6 +96,7 @@ var mage_steroids_count := 0
 var knight_steroids_count := 0
 var rat_gold_bonus := 0
 var goblin_gold_bonus := 0
+var click_kill_gold_multiplier := 1.0
 var soldier_damage_bonus := 0
 var mage_range_multiplier := 1.0
 var knight_speed_multiplier := 1.0
@@ -125,6 +132,7 @@ func _ready() -> void:
 	mage_button.pressed.connect(_on_buy_mage_pressed)
 	knight_button.pressed.connect(_on_buy_knight_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
+	hand_of_god_button.pressed.connect(_on_buy_hand_of_god_pressed)
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
 	goblin_steroids_button.pressed.connect(_on_buy_goblin_steroids_pressed)
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
@@ -227,7 +235,7 @@ func _input(event: InputEvent) -> void:
 
 func apply_click_damage(rat: Node) -> void:
 	if rat.has_method("take_damage"):
-		rat.take_damage(click_damage)
+		rat.take_damage(click_damage, "click")
 
 func _apply_click_damage_at(click_pos: Vector2) -> void:
 	var space_state := get_world_2d().direct_space_state
@@ -293,11 +301,16 @@ func get_random_near_player_unit(from_pos: Vector2, candidates_count: int = 3) -
 	var choice_index := randi_range(0, max_candidates - 1)
 	return candidates[choice_index]["unit"]
 
-func _on_enemy_died(gold_value: int, enemy_kind: String) -> void:
+func _on_enemy_died(gold_value: int, enemy_kind: String, killed_by_click: bool) -> void:
+	var base_gain := gold_value
 	if enemy_kind == "goblin":
-		gold += gold_value + goblin_gold_bonus
+		base_gain += goblin_gold_bonus
 	else:
-		gold += gold_value + rat_gold_bonus
+		base_gain += rat_gold_bonus
+	if killed_by_click:
+		gold += int(round(base_gain * click_kill_gold_multiplier))
+	else:
+		gold += base_gain
 	_update_ui()
 
 func _on_purchases_tab_pressed() -> void:
@@ -366,6 +379,15 @@ func _on_buy_click_upgrade_pressed() -> void:
 	gold -= cost
 	click_upgrade_count += 1
 	click_damage += 1
+	_update_ui()
+
+func _on_buy_hand_of_god_pressed() -> void:
+	var cost := _get_hand_of_god_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	hand_of_god_count += 1
+	click_kill_gold_multiplier *= 1.5
 	_update_ui()
 
 func _on_buy_rat_steroids_pressed() -> void:
@@ -554,6 +576,7 @@ func _update_ui() -> void:
 	mage_count_label.text = str(mage_count)
 	knight_count_label.text = str(knight_count)
 	click_upgrade_count_label.text = str(click_upgrade_count)
+	hand_of_god_count_label.text = str(hand_of_god_count)
 	rat_steroids_count_label.text = str(rat_steroids_count)
 	goblin_steroids_count_label.text = str(goblin_steroids_count)
 	soldier_steroids_count_label.text = str(soldier_steroids_count)
@@ -567,6 +590,7 @@ func _update_ui() -> void:
 	mage_button.text = _format_cost(_get_mage_cost())
 	knight_button.text = _format_cost(_get_knight_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
+	hand_of_god_button.text = _format_cost(_get_hand_of_god_cost())
 	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
 	goblin_steroids_button.text = _format_cost(_get_goblin_steroids_cost())
 	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
@@ -578,6 +602,7 @@ func _update_ui() -> void:
 	torbellino_row.visible = soldier_steroids_count >= 5 or torbellino_purchased
 	torbellino_button.disabled = torbellino_purchased
 	torbellino_button.text = "-" if torbellino_purchased else _format_cost(BASE_TORBELLINO_COST)
+	hand_of_god_row.visible = click_upgrade_count >= 5 or hand_of_god_count > 0
 
 func _get_nest_cost() -> int:
 	return int(BASE_NEST_COST * pow(NEST_COST_MULTIPLIER, nest_count))
@@ -609,6 +634,9 @@ func _get_pending_purchase_cost() -> int:
 
 func _get_click_upgrade_cost() -> int:
 	return int(BASE_CLICK_UPGRADE_COST * pow(CLICK_UPGRADE_MULTIPLIER, click_upgrade_count))
+
+func _get_hand_of_god_cost() -> int:
+	return int(BASE_HAND_OF_GOD_COST * pow(HAND_OF_GOD_MULTIPLIER, hand_of_god_count))
 
 func _get_rat_steroids_cost() -> int:
 	return int(BASE_RAT_STEROIDS_COST * pow(RAT_STEROIDS_MULTIPLIER, rat_steroids_count))
