@@ -505,14 +505,14 @@ horizontal_alignment = 1
 [node name="MageSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
+tooltip_text = "Aumenta el alcance de los magos aliados en un 10%."
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 15
 text = "Esteroides de mago"
 
 [node name="MageSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
-tooltip_text = "Aumenta el daño de los magos aliados en +1 y su alcance en +6."
+tooltip_text = "Aumenta el alcance de los magos aliados en un 10%."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
