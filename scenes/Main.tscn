@@ -11,16 +11,20 @@ border_width_bottom = 2
 border_color = Color(0.3, 0.34, 0.42, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
-corner_radius_bottom_left = 10
 corner_radius_bottom_right = 10
-expand_margin_left = 6
-expand_margin_top = 6
-expand_margin_right = 6
-expand_margin_bottom = 6
+corner_radius_bottom_left = 10
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
 shadow_color = Color(0, 0, 0, 0.35)
 shadow_size = 6
 
 [sub_resource type="StyleBoxFlat" id="2"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
 bg_color = Color(0.06, 0.07, 0.1, 0.96)
 border_width_left = 2
 border_width_top = 2
@@ -29,16 +33,16 @@ border_width_bottom = 2
 border_color = Color(0.24, 0.28, 0.35, 1)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
-corner_radius_bottom_left = 12
 corner_radius_bottom_right = 12
-content_margin_left = 12
-content_margin_top = 12
-content_margin_right = 12
-content_margin_bottom = 12
+corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.45)
 shadow_size = 10
 
 [sub_resource type="StyleBoxFlat" id="3"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
 bg_color = Color(0.16, 0.19, 0.26, 1)
 border_width_left = 1
 border_width_top = 1
@@ -47,30 +51,14 @@ border_width_bottom = 1
 border_color = Color(0.38, 0.44, 0.55, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-corner_radius_bottom_left = 8
 corner_radius_bottom_right = 8
-content_margin_left = 12
-content_margin_right = 12
-content_margin_top = 6
-content_margin_bottom = 6
-
-[sub_resource type="StyleBoxFlat" id="4"]
-bg_color = Color(0.2, 0.24, 0.32, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.6, 0.68, 0.8, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
 corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-content_margin_left = 12
-content_margin_right = 12
-content_margin_top = 6
-content_margin_bottom = 6
 
 [sub_resource type="StyleBoxFlat" id="5"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
 bg_color = Color(0.12, 0.15, 0.22, 1)
 border_width_left = 1
 border_width_top = 1
@@ -79,14 +67,30 @@ border_width_bottom = 1
 border_color = Color(0.32, 0.38, 0.5, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-corner_radius_bottom_left = 8
 corner_radius_bottom_right = 8
-content_margin_left = 12
-content_margin_right = 12
-content_margin_top = 6
-content_margin_bottom = 6
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="4"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.24, 0.32, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.68, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="6"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
 bg_color = Color(0.1, 0.12, 0.16, 0.7)
 border_width_left = 1
 border_width_top = 1
@@ -95,12 +99,8 @@ border_width_bottom = 1
 border_color = Color(0.2, 0.22, 0.28, 0.7)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-corner_radius_bottom_left = 8
 corner_radius_bottom_right = 8
-content_margin_left = 12
-content_margin_right = 12
-content_margin_top = 6
-content_margin_bottom = 6
+corner_radius_bottom_left = 8
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1")
@@ -127,10 +127,11 @@ mouse_filter = 2
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 20.0
+offset_left = 47.0
 offset_top = 16.0
-offset_right = -320.0
+offset_right = -306.0
 offset_bottom = 70.0
+grow_horizontal = 2
 theme_override_styles/panel = SubResource("1")
 
 [node name="TopBarContent" type="HBoxContainer" parent="HUD/UIRoot/TopBar"]
@@ -183,20 +184,20 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "Compras"
 
 [node name="UpgradesTabButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/TabButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "Mejoras"
 
 [node name="PurchasesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
@@ -217,10 +218,10 @@ text = "Nido de ratas"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "5"
 
 [node name="SoldierRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
@@ -237,10 +238,10 @@ text = "Soldado"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "5"
 
 [node name="MageRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
@@ -257,10 +258,10 @@ text = "Mago"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "20"
 
 [node name="UpgradesList" type="VBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent"]
@@ -281,10 +282,10 @@ text = "Mejora de click"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "5"
 
 [node name="RatSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -301,10 +302,10 @@ text = "Esteroides de rata"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "5"
 
 [node name="SoldierSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -321,10 +322,10 @@ text = "Esteroides de soldado"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "5"
 
 [node name="MageSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
@@ -341,8 +342,8 @@ text = "Esteroides de mago"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/disabled = SubResource("6")
-theme_override_styles/hover = SubResource("4")
 theme_override_styles/normal = SubResource("3")
 theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
 text = "20"
