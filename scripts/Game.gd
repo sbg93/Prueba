@@ -47,6 +47,9 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var click_damage_label: Label = $HUD/UIRoot/TopBar/TopBarContent/ClickDamageLabel
 @onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
 @onready var trash_button: Button = $HUD/UIRoot/TopBar/TopBarContent/TrashButton
+@onready var menu_button: Button = $HUD/UIRoot/TopBar/TopBarContent/MenuButton
+@onready var options_menu: PanelContainer = $HUD/UIRoot/OptionsMenu
+@onready var close_menu_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/CloseMenuButton
 @onready var purchases_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/PurchasesTabButton
 @onready var upgrades_tab_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/TabButtons/UpgradesTabButton
 @onready var purchases_list: VBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList
@@ -134,6 +137,8 @@ func _ready() -> void:
 	purchases_tab_button.pressed.connect(_on_purchases_tab_pressed)
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	trash_button.pressed.connect(_on_trash_pressed)
+	menu_button.pressed.connect(_on_menu_button_pressed)
+	close_menu_button.pressed.connect(_on_close_menu_pressed)
 	rat_nest_button.pressed.connect(_on_buy_rat_nest_pressed)
 	goblin_nest_button.pressed.connect(_on_buy_goblin_nest_pressed)
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
@@ -512,6 +517,7 @@ func _refresh_pending_purchase() -> void:
 		_clear_pending_purchase()
 
 func _on_trash_pressed() -> void:
+	_hide_menu()
 	if pending_delete:
 		_clear_pending_delete()
 		return
@@ -519,6 +525,16 @@ func _on_trash_pressed() -> void:
 		_clear_pending_purchase()
 	pending_delete = true
 	placement_label.text = "Selecciona la unidad que quieres eliminar."
+
+func _on_menu_button_pressed() -> void:
+	options_menu.visible = not options_menu.visible
+
+func _on_close_menu_pressed() -> void:
+	_hide_menu()
+
+func _hide_menu() -> void:
+	if options_menu.visible:
+		options_menu.visible = false
 
 func _clear_pending_delete() -> void:
 	pending_delete = false
