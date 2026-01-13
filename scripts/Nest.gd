@@ -20,14 +20,15 @@ func _spawn_rat() -> void:
 		return
 	if _active_rats >= MAX_ACTIVE_RATS:
 		return
+	var is_green := randf() < 0.1
 	var offset := Vector2(
 		randf_range(-spawn_radius, spawn_radius),
 		randf_range(-spawn_radius, spawn_radius)
 	)
-	var rat : Node = game.spawn_rat_at_position(global_position + offset)
+	var rat : Node = game.spawn_rat_at_position(global_position + offset, is_green)
 	if rat != null:
 		_active_rats += 1
 		rat.died.connect(_on_rat_died)
 
-func _on_rat_died() -> void:
+func _on_rat_died(_gold_value: int) -> void:
 	_active_rats = max(_active_rats - 1, 0)
