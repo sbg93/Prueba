@@ -9,7 +9,7 @@ var game: Node
 var _attack_timer := 0.0
 var _attack_sound: AudioStreamPlayer2D
 var _attack_stream: AudioStreamGenerator
-var _current_target: Node2D
+var _current_target
 
 func _ready() -> void:
 	add_to_group("soldiers")
@@ -41,8 +41,13 @@ func _physics_process(delta: float) -> void:
 			_current_target.take_damage(attack_damage)
 		_play_attack_sound()
 
-func _is_target_valid(target: Node2D) -> bool:
-	return target != null and is_instance_valid(target) and target.is_inside_tree()
+func _is_target_valid(target) -> bool:
+	return (
+		target != null
+		and is_instance_valid(target)
+		and target is Node2D
+		and target.is_inside_tree()
+	)
 
 func _play_attack_sound() -> void:
 	if _attack_sound == null or _attack_stream == null:
