@@ -75,7 +75,7 @@ const DELETE_SELECT_RADIUS := 26.0
 @onready var torbellino_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoCountLabel
 @onready var torbellino_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/TorbellinoRow/TorbellinoButton
 
-var gold := 1000
+var gold := 100000
 var click_damage := 1
 var nest_count := 0
 var goblin_nest_count := 0
