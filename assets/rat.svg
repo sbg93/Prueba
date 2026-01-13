@@ -1,31 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="none"/>
   <!-- Tail -->
-  <rect x="4" y="36" width="4" height="4" fill="#d07b7b"/>
-  <rect x="8" y="32" width="4" height="4" fill="#d07b7b"/>
-  <rect x="8" y="28" width="4" height="4" fill="#d07b7b"/>
-  <rect x="8" y="36" width="4" height="4" fill="#d07b7b"/>
+  <rect x="4" y="40" width="4" height="4" fill="#c97a7a"/>
+  <rect x="8" y="40" width="4" height="4" fill="#c97a7a"/>
+  <rect x="12" y="40" width="4" height="4" fill="#c97a7a"/>
+  <rect x="12" y="36" width="4" height="4" fill="#c97a7a"/>
+  <rect x="16" y="36" width="4" height="4" fill="#c97a7a"/>
+  <!-- Body shadow -->
+  <rect x="20" y="32" width="24" height="4" fill="#6f6464"/>
+  <rect x="16" y="36" width="32" height="4" fill="#6f6464"/>
+  <rect x="16" y="40" width="32" height="4" fill="#6f6464"/>
+  <rect x="20" y="44" width="24" height="4" fill="#6f6464"/>
   <!-- Body -->
-  <rect x="16" y="28" width="24" height="4" fill="#8c7b7b"/>
-  <rect x="12" y="32" width="32" height="4" fill="#8c7b7b"/>
-  <rect x="12" y="36" width="32" height="4" fill="#8c7b7b"/>
-  <rect x="16" y="40" width="24" height="4" fill="#8c7b7b"/>
-  <rect x="20" y="44" width="16" height="4" fill="#8c7b7b"/>
+  <rect x="20" y="28" width="24" height="4" fill="#8a7a7a"/>
+  <rect x="16" y="32" width="32" height="4" fill="#8a7a7a"/>
+  <rect x="16" y="36" width="32" height="4" fill="#8a7a7a"/>
+  <rect x="20" y="40" width="24" height="4" fill="#8a7a7a"/>
+  <rect x="24" y="44" width="16" height="4" fill="#8a7a7a"/>
   <!-- Belly -->
-  <rect x="20" y="36" width="12" height="4" fill="#b8a3a3"/>
-  <rect x="20" y="40" width="8" height="4" fill="#b8a3a3"/>
+  <rect x="24" y="36" width="12" height="4" fill="#b9a4a4"/>
+  <rect x="24" y="40" width="8" height="4" fill="#b9a4a4"/>
   <!-- Head -->
-  <rect x="40" y="24" width="12" height="4" fill="#8c7b7b"/>
-  <rect x="40" y="28" width="16" height="4" fill="#8c7b7b"/>
-  <rect x="44" y="32" width="12" height="4" fill="#8c7b7b"/>
-  <rect x="44" y="36" width="8" height="4" fill="#8c7b7b"/>
+  <rect x="44" y="24" width="12" height="4" fill="#8a7a7a"/>
+  <rect x="44" y="28" width="12" height="4" fill="#8a7a7a"/>
+  <rect x="48" y="32" width="12" height="4" fill="#8a7a7a"/>
+  <rect x="48" y="36" width="8" height="4" fill="#8a7a7a"/>
+  <!-- Snout -->
+  <rect x="56" y="32" width="4" height="4" fill="#8a7a7a"/>
+  <rect x="60" y="32" width="4" height="4" fill="#d18686"/>
   <!-- Ear -->
-  <rect x="44" y="20" width="4" height="4" fill="#c58f8f"/>
+  <rect x="44" y="20" width="4" height="4" fill="#c89292"/>
+  <rect x="48" y="20" width="4" height="4" fill="#c89292"/>
+  <rect x="46" y="22" width="4" height="4" fill="#e2b3b3"/>
   <!-- Eye -->
-  <rect x="48" y="28" width="4" height="4" fill="#1b0f0f"/>
-  <!-- Nose -->
-  <rect x="52" y="32" width="4" height="4" fill="#c76b6b"/>
+  <rect x="52" y="28" width="4" height="4" fill="#1b0f0f"/>
+  <!-- Whiskers -->
+  <rect x="56" y="28" width="4" height="4" fill="#3a2f2f"/>
+  <rect x="56" y="36" width="4" height="4" fill="#3a2f2f"/>
   <!-- Feet -->
-  <rect x="20" y="48" width="4" height="4" fill="#3a2f2f"/>
-  <rect x="32" y="48" width="4" height="4" fill="#3a2f2f"/>
+  <rect x="24" y="48" width="4" height="4" fill="#3a2f2f"/>
+  <rect x="36" y="48" width="4" height="4" fill="#3a2f2f"/>
 </svg>
