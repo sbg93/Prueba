@@ -39,6 +39,7 @@ const HAND_OF_GOD_MULTIPLIER := 2
 const BASE_RAT_GOLD_VALUE := 1
 const BASE_SOLDIER_DAMAGE := 1
 const BASE_MAGE_DAMAGE := 3
+const BASE_KNIGHT_DAMAGE := 5
 const BASE_MAGE_RANGE := 120.0
 const BASE_KNIGHT_SPEED := 220.0
 const BASE_BARDO_SPAWN_BONUS := 0.1
@@ -48,6 +49,9 @@ const KNIGHT_SIZE_MULTIPLIER_PER_UPGRADE := 1.10
 const DELETE_SELECT_RADIUS := 26.0
 const BASE_SKILL_POINT_GOAL := 10000
 const SKILL_POINT_GOAL_MULTIPLIER := 2
+const SOLDIER_ATTACK_INTERVAL := 2.0
+const MAGE_ATTACK_INTERVAL := 2.2
+const KNIGHT_ATTACK_INTERVAL := 3.0
 
 @export var playfield_rect := Rect2()
 
@@ -59,7 +63,14 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var skill_points_label: Label = $HUD/UIRoot/TopBar/TopBarContent/SkillProgressContainer/SkillPointsLabel
 @onready var placement_label: Label = $HUD/UIRoot/TopBar/TopBarContent/PlacementLabel
 @onready var trash_button: Button = $HUD/UIRoot/TopBar/TopBarContent/TrashButton
+@onready var dps_button: Button = $HUD/UIRoot/TopBar/TopBarContent/DpsButton
 @onready var menu_button: Button = $HUD/UIRoot/TopBar/TopBarContent/MenuButton
+@onready var dps_window: PanelContainer = $HUD/UIRoot/DpsWindow
+@onready var dps_close_button: Button = $HUD/UIRoot/DpsWindow/DpsContent/DpsHeader/DpsCloseButton
+@onready var soldier_dps_label: Label = $HUD/UIRoot/DpsWindow/DpsContent/DpsList/SoldierDpsLabel
+@onready var mage_dps_label: Label = $HUD/UIRoot/DpsWindow/DpsContent/DpsList/MageDpsLabel
+@onready var knight_dps_label: Label = $HUD/UIRoot/DpsWindow/DpsContent/DpsList/KnightDpsLabel
+@onready var bardo_dps_label: Label = $HUD/UIRoot/DpsWindow/DpsContent/DpsList/BardoDpsLabel
 @onready var options_menu: PanelContainer = $HUD/UIRoot/OptionsMenu
 @onready var close_menu_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/CloseMenuButton
 @onready var reincarnate_button: Button = $HUD/UIRoot/OptionsMenu/MenuContent/MenuHeader/ReincarnateButton
@@ -174,7 +185,9 @@ func _ready() -> void:
 	purchases_tab_button.pressed.connect(_on_purchases_tab_pressed)
 	upgrades_tab_button.pressed.connect(_on_upgrades_tab_pressed)
 	trash_button.pressed.connect(_on_trash_pressed)
+	dps_button.pressed.connect(_on_dps_button_pressed)
 	menu_button.pressed.connect(_on_menu_button_pressed)
+	dps_close_button.pressed.connect(_on_dps_close_pressed)
 	close_menu_button.pressed.connect(_on_close_menu_pressed)
 	reincarnate_button.pressed.connect(_on_reincarnate_pressed)
 	_setup_option_skills()
@@ -605,6 +618,13 @@ func _on_trash_pressed() -> void:
 func _on_menu_button_pressed() -> void:
 	options_menu.visible = not options_menu.visible
 
+func _on_dps_button_pressed() -> void:
+	dps_window.visible = true
+	_update_dps_window()
+
+func _on_dps_close_pressed() -> void:
+	dps_window.visible = false
+
 func _on_close_menu_pressed() -> void:
 	_reset_option_skills()
 	_hide_menu()
@@ -853,6 +873,38 @@ func _update_ui() -> void:
 	torbellino_button.text = "-" if torbellino_purchased else _format_cost(BASE_TORBELLINO_COST)
 	hand_of_god_row.visible = (click_upgrade_count >= 5 and _is_hand_of_god_icon_unlocked()) or hand_of_god_count > 0
 	knight_anabolizantes_row.visible = (_is_knight_unlocked() and knight_steroids_count >= 5) or knight_anabolizantes_count > 0
+	if dps_window.visible:
+		_update_dps_window()
+
+func _update_dps_window() -> void:
+	var soldier_dps := _get_soldier_dps()
+	var mage_dps := _get_mage_dps()
+	var knight_dps := _get_knight_dps()
+	var bardo_dps := 0.0
+	soldier_dps_label.text = "Soldado: %s dps" % _format_dps(soldier_dps)
+	mage_dps_label.text = "Mago: %s dps" % _format_dps(mage_dps)
+	knight_dps_label.text = "Caballero: %s dps" % _format_dps(knight_dps)
+	bardo_dps_label.text = "Bardo: %s dps" % _format_dps(bardo_dps)
+
+func _format_dps(value: float) -> String:
+	return "%.1f" % value
+
+func _get_soldier_dps() -> float:
+	var damage := BASE_SOLDIER_DAMAGE + soldier_damage_bonus
+	if SOLDIER_ATTACK_INTERVAL <= 0.0:
+		return 0.0
+	return (float(damage) / SOLDIER_ATTACK_INTERVAL) * soldier_count
+
+func _get_mage_dps() -> float:
+	if MAGE_ATTACK_INTERVAL <= 0.0:
+		return 0.0
+	var multiplier := 2.0 if double_fireball_purchased else 1.0
+	return (float(BASE_MAGE_DAMAGE) * multiplier / MAGE_ATTACK_INTERVAL) * mage_count
+
+func _get_knight_dps() -> float:
+	if KNIGHT_ATTACK_INTERVAL <= 0.0:
+		return 0.0
+	return (float(BASE_KNIGHT_DAMAGE) / KNIGHT_ATTACK_INTERVAL) * knight_count
 
 func _register_gold_earned(amount: int) -> void:
 	if amount <= 0:
