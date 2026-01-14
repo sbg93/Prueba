@@ -783,10 +783,10 @@ func _update_ui() -> void:
 	double_fireball_row.visible = (_is_mage_unlocked() and mage_steroids_count >= 5) or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
-	torbellino_row.visible = soldier_steroids_count >= 5 or torbellino_purchased
+	torbellino_row.visible = (soldier_steroids_count >= 5 and _is_torbellino_icon_unlocked()) or torbellino_purchased
 	torbellino_button.disabled = torbellino_purchased
 	torbellino_button.text = "-" if torbellino_purchased else _format_cost(BASE_TORBELLINO_COST)
-	hand_of_god_row.visible = click_upgrade_count >= 5 or hand_of_god_count > 0
+	hand_of_god_row.visible = (click_upgrade_count >= 5 and _is_hand_of_god_icon_unlocked()) or hand_of_god_count > 0
 	knight_anabolizantes_row.visible = (_is_knight_unlocked() and knight_steroids_count >= 5) or knight_anabolizantes_count > 0
 
 func _register_gold_earned(amount: int) -> void:
@@ -878,6 +878,12 @@ func _is_mage_unlocked() -> bool:
 
 func _is_knight_unlocked() -> bool:
 	return permanent_option_skills.get(horse_button, false)
+
+func _is_hand_of_god_icon_unlocked() -> bool:
+	return permanent_option_skills.get(hand_button, false)
+
+func _is_torbellino_icon_unlocked() -> bool:
+	return permanent_option_skills.get(swirl_button, false)
 
 func is_double_fireball_unlocked() -> bool:
 	return double_fireball_purchased
