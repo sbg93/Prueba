@@ -11,7 +11,8 @@ var _active_goblins := 0
 
 func _process(delta: float) -> void:
 	_timer += delta
-	if _timer >= spawn_interval:
+	var adjusted_interval := _get_adjusted_spawn_interval()
+	if _timer >= adjusted_interval:
 		_timer = 0.0
 		_spawn_goblin()
 
@@ -34,3 +35,20 @@ func _spawn_goblin() -> void:
 
 func _on_goblin_died(_gold_value: int, _enemy_kind: String, _killed_by_click: bool) -> void:
 	_active_goblins = max(_active_goblins - 1, 0)
+
+func _get_adjusted_spawn_interval() -> float:
+	var multiplier := _get_bardo_spawn_multiplier()
+	if multiplier <= 0.0:
+		return spawn_interval
+	return spawn_interval / multiplier
+
+func _get_bardo_spawn_multiplier() -> float:
+	if game == null or not game.has_method("get_bardo_spawn_bonus"):
+		return 1.0
+	var total_bonus := 0.0
+	for bardo in get_tree().get_nodes_in_group("bardos"):
+		if bardo is Node2D:
+			var effect_range := bardo.effect_range if "effect_range" in bardo else 0.0
+			if effect_range > 0.0 and global_position.distance_to(bardo.global_position) <= effect_range:
+				total_bonus += game.get_bardo_spawn_bonus()
+	return 1.0 + total_bonus

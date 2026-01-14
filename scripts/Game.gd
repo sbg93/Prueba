@@ -5,12 +5,14 @@ const BASE_GOBLIN_NEST_COST := 20
 const BASE_SOLDIER_COST := 5
 const BASE_MAGE_COST := 20
 const BASE_KNIGHT_COST := 100
+const BASE_BARDO_COST := 50
 const BASE_CLICK_UPGRADE_COST := 5
 const BASE_RAT_STEROIDS_COST := 5
 const BASE_GOBLIN_STEROIDS_COST := 20
 const BASE_SOLDIER_STEROIDS_COST := 5
 const BASE_MAGE_STEROIDS_COST := 20
 const BASE_KNIGHT_STEROIDS_COST := 50
+const BASE_BARDO_STEROIDS_COST := 20
 const BASE_KNIGHT_ANABOLIZANTES_COST := 100
 const BASE_DOUBLE_FIREBALL_COST := 100
 const BASE_TORBELLINO_COST := 100
@@ -23,12 +25,14 @@ const GOBLIN_NEST_COST_MULTIPLIER := 3
 const SOLDIER_COST_MULTIPLIER := 2
 const MAGE_COST_MULTIPLIER := 2
 const KNIGHT_COST_MULTIPLIER := 3
+const BARDO_COST_MULTIPLIER := 2
 const CLICK_UPGRADE_MULTIPLIER := 2
 const RAT_STEROIDS_MULTIPLIER := 2
 const GOBLIN_STEROIDS_MULTIPLIER := 3
 const SOLDIER_STEROIDS_MULTIPLIER := 2
 const MAGE_STEROIDS_MULTIPLIER := 2
 const KNIGHT_STEROIDS_MULTIPLIER := 2
+const BARDO_STEROIDS_MULTIPLIER := 3
 const KNIGHT_ANABOLIZANTES_MULTIPLIER := 3
 const HAND_OF_GOD_MULTIPLIER := 2
 
@@ -72,6 +76,8 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var mage_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageCountLabel
 @onready var knight_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow
 @onready var knight_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightCountLabel
+@onready var bardo_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow
+@onready var bardo_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow/BardoCountLabel
 @onready var click_upgrade_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeCountLabel
 @onready var hand_of_god_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow
 @onready var hand_of_god_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow/HandOfGodCountLabel
@@ -82,6 +88,8 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var mage_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsCountLabel
 @onready var knight_steroids_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow
 @onready var knight_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow/KnightSteroidsCountLabel
+@onready var bardo_steroids_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow
+@onready var bardo_steroids_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow/BardoSteroidsCountLabel
 @onready var knight_anabolizantes_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightAnabolizantesRow
 @onready var knight_anabolizantes_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightAnabolizantesRow/KnightAnabolizantesCountLabel
 @onready var knight_anabolizantes_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightAnabolizantesRow/KnightAnabolizantesButton
@@ -90,6 +98,7 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var soldier_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/SoldierRow/SoldierBuyButton
 @onready var mage_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/MageRow/MageBuyButton
 @onready var knight_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/KnightRow/KnightBuyButton
+@onready var bardo_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow/BardoBuyButton
 @onready var click_upgrade_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/ClickUpgradeRow/ClickUpgradeButton
 @onready var hand_of_god_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/HandOfGodRow/HandOfGodButton
 @onready var rat_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/RatSteroidsRow/RatSteroidsButton
@@ -97,6 +106,7 @@ const SKILL_POINT_GOAL_MULTIPLIER := 2
 @onready var soldier_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/SoldierSteroidsRow/SoldierSteroidsButton
 @onready var mage_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow/MageSteroidsButton
 @onready var knight_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/KnightSteroidsRow/KnightSteroidsButton
+@onready var bardo_steroids_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow/BardoSteroidsButton
 @onready var double_fireball_row: HBoxContainer = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow
 @onready var double_fireball_count_label: Label = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballCountLabel
 @onready var double_fireball_button: Button = $HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/DoubleFireballRow/DoubleFireballButton
@@ -115,6 +125,7 @@ var goblin_nest_count := 0
 var soldier_count := 0
 var mage_count := 0
 var knight_count := 0
+var bardo_count := 0
 var click_upgrade_count := 0
 var hand_of_god_count := 0
 var rat_steroids_count := 0
@@ -122,6 +133,7 @@ var goblin_steroids_count := 0
 var soldier_steroids_count := 0
 var mage_steroids_count := 0
 var knight_steroids_count := 0
+var bardo_steroids_count := 0
 var knight_anabolizantes_count := 0
 var rat_gold_bonus := 0
 var goblin_gold_bonus := 0
@@ -151,6 +163,7 @@ var goblin_nest_scene := preload("res://scenes/GoblinNest.tscn")
 var soldier_scene := preload("res://scenes/Soldier.tscn")
 var mage_scene := preload("res://scenes/Mage.tscn")
 var knight_scene := preload("res://scenes/Knight.tscn")
+var bardo_scene := preload("res://scenes/Bardo.tscn")
 
 func _ready() -> void:
 	add_to_group("game")
@@ -168,6 +181,7 @@ func _ready() -> void:
 	soldier_button.pressed.connect(_on_buy_soldier_pressed)
 	mage_button.pressed.connect(_on_buy_mage_pressed)
 	knight_button.pressed.connect(_on_buy_knight_pressed)
+	bardo_button.pressed.connect(_on_buy_bardo_pressed)
 	click_upgrade_button.pressed.connect(_on_buy_click_upgrade_pressed)
 	hand_of_god_button.pressed.connect(_on_buy_hand_of_god_pressed)
 	rat_steroids_button.pressed.connect(_on_buy_rat_steroids_pressed)
@@ -175,6 +189,7 @@ func _ready() -> void:
 	soldier_steroids_button.pressed.connect(_on_buy_soldier_steroids_pressed)
 	mage_steroids_button.pressed.connect(_on_buy_mage_steroids_pressed)
 	knight_steroids_button.pressed.connect(_on_buy_knight_steroids_pressed)
+	bardo_steroids_button.pressed.connect(_on_buy_bardo_steroids_pressed)
 	knight_anabolizantes_button.pressed.connect(_on_buy_knight_anabolizantes_pressed)
 	double_fireball_button.pressed.connect(_on_buy_double_fireball_pressed)
 	torbellino_button.pressed.connect(_on_buy_torbellino_pressed)
@@ -324,7 +339,7 @@ func get_random_near_enemy(from_pos: Vector2, candidates_count: int = 3) -> Node
 
 func get_random_near_player_unit(from_pos: Vector2, candidates_count: int = 3) -> Node:
 	var candidates: Array[Dictionary] = []
-	for group_name in ["soldiers", "mages", "knights", "nests", "goblin_nests"]:
+	for group_name in ["soldiers", "mages", "knights", "bardos", "nests", "goblin_nests"]:
 		for unit in get_tree().get_nodes_in_group(group_name):
 			candidates.append({
 				"unit": unit,
@@ -338,6 +353,18 @@ func get_random_near_player_unit(from_pos: Vector2, candidates_count: int = 3) -
 	var max_candidates : Variant = min(candidates_count, candidates.size())
 	var choice_index := randi_range(0, max_candidates - 1)
 	return candidates[choice_index]["unit"]
+
+func get_random_nest(exclude: Node = null) -> Node:
+	var nests: Array[Node2D] = []
+	for group_name in ["nests", "goblin_nests"]:
+		for nest in get_tree().get_nodes_in_group(group_name):
+			if nest != exclude:
+				nests.append(nest)
+	if nests.is_empty():
+		if exclude != null and exclude.is_inside_tree():
+			return exclude
+		return null
+	return nests[randi_range(0, nests.size() - 1)]
 
 func _on_enemy_died(gold_value: int, enemy_kind: String, killed_by_click: bool) -> void:
 	var base_gain := gold_value
@@ -413,6 +440,15 @@ func _on_buy_knight_pressed() -> void:
 	pending_cost = cost
 	placement_label.text = "Selecciona dónde desplegar el caballero."
 
+func _on_buy_bardo_pressed() -> void:
+	var cost := _get_bardo_cost()
+	if gold < cost:
+		return
+	_clear_pending_delete()
+	pending_purchase = "bardo"
+	pending_cost = cost
+	placement_label.text = "Selecciona dónde desplegar el bardo."
+
 func _on_buy_click_upgrade_pressed() -> void:
 	var cost := _get_click_upgrade_cost()
 	if gold < cost:
@@ -479,6 +515,14 @@ func _on_buy_knight_steroids_pressed() -> void:
 	_update_knight_speed()
 	_update_ui()
 
+func _on_buy_bardo_steroids_pressed() -> void:
+	var cost := _get_bardo_steroids_cost()
+	if gold < cost:
+		return
+	gold -= cost
+	bardo_steroids_count += 1
+	_update_ui()
+
 func _on_buy_knight_anabolizantes_pressed() -> void:
 	var cost := _get_knight_anabolizantes_cost()
 	if gold < cost:
@@ -530,6 +574,9 @@ func _place_pending_purchase(click_pos: Vector2) -> void:
 	elif pending_purchase == "knight":
 		_spawn_knight(click_pos)
 		knight_count += 1
+	elif pending_purchase == "bardo":
+		_spawn_bardo(click_pos)
+		bardo_count += 1
 	_refresh_pending_purchase()
 	_update_ui()
 
@@ -656,6 +703,7 @@ func _reset_run_state() -> void:
 	soldier_count = 0
 	mage_count = 0
 	knight_count = 0
+	bardo_count = 0
 	click_upgrade_count = 0
 	hand_of_god_count = 0
 	rat_steroids_count = 0
@@ -663,6 +711,7 @@ func _reset_run_state() -> void:
 	soldier_steroids_count = 0
 	mage_steroids_count = 0
 	knight_steroids_count = 0
+	bardo_steroids_count = 0
 	knight_anabolizantes_count = 0
 	rat_gold_bonus = 0
 	goblin_gold_bonus = 0
@@ -678,7 +727,7 @@ func _reset_run_state() -> void:
 func _find_deletable_target(click_pos: Vector2) -> Node2D:
 	var closest_target: Node2D = null
 	var closest_distance := DELETE_SELECT_RADIUS
-	for group_name in ["nests", "goblin_nests", "soldiers", "mages", "knights"]:
+	for group_name in ["nests", "goblin_nests", "soldiers", "mages", "knights", "bardos"]:
 		for unit in get_tree().get_nodes_in_group(group_name):
 			if unit is Node2D:
 				var distance := click_pos.distance_to(unit.global_position)
@@ -698,6 +747,8 @@ func _delete_unit(unit: Node2D) -> void:
 		mage_count = max(mage_count - 1, 0)
 	elif unit.is_in_group("knights"):
 		knight_count = max(knight_count - 1, 0)
+	elif unit.is_in_group("bardos"):
+		bardo_count = max(bardo_count - 1, 0)
 	unit.queue_free()
 	_update_ui()
 
@@ -741,6 +792,12 @@ func _spawn_knight(spawn_pos: Vector2) -> void:
 		knight.scale = Vector2.ONE * knight_size_multiplier
 	playfield.add_child(knight)
 
+func _spawn_bardo(spawn_pos: Vector2) -> void:
+	var bardo := bardo_scene.instantiate()
+	bardo.position = spawn_pos
+	bardo.game = self
+	playfield.add_child(bardo)
+
 func _update_ui() -> void:
 	gold_label.text = "🪙 %d" % gold
 	click_damage_label.text = "Daño: %d" % click_damage
@@ -753,6 +810,7 @@ func _update_ui() -> void:
 	soldier_count_label.text = str(soldier_count)
 	mage_count_label.text = str(mage_count)
 	knight_count_label.text = str(knight_count)
+	bardo_count_label.text = str(bardo_count)
 	click_upgrade_count_label.text = str(click_upgrade_count)
 	hand_of_god_count_label.text = str(hand_of_god_count)
 	rat_steroids_count_label.text = str(rat_steroids_count)
@@ -760,6 +818,7 @@ func _update_ui() -> void:
 	soldier_steroids_count_label.text = str(soldier_steroids_count)
 	mage_steroids_count_label.text = str(mage_steroids_count)
 	knight_steroids_count_label.text = str(knight_steroids_count)
+	bardo_steroids_count_label.text = str(bardo_steroids_count)
 	knight_anabolizantes_count_label.text = str(knight_anabolizantes_count)
 	double_fireball_count_label.text = "1" if double_fireball_purchased else "0"
 	torbellino_count_label.text = "1" if torbellino_purchased else "0"
@@ -768,6 +827,7 @@ func _update_ui() -> void:
 	soldier_button.text = _format_cost(_get_soldier_cost())
 	mage_button.text = _format_cost(_get_mage_cost())
 	knight_button.text = _format_cost(_get_knight_cost())
+	bardo_button.text = _format_cost(_get_bardo_cost())
 	click_upgrade_button.text = _format_cost(_get_click_upgrade_cost())
 	hand_of_god_button.text = _format_cost(_get_hand_of_god_cost())
 	rat_steroids_button.text = _format_cost(_get_rat_steroids_cost())
@@ -775,11 +835,14 @@ func _update_ui() -> void:
 	soldier_steroids_button.text = _format_cost(_get_soldier_steroids_cost())
 	mage_steroids_button.text = _format_cost(_get_mage_steroids_cost())
 	knight_steroids_button.text = _format_cost(_get_knight_steroids_cost())
+	bardo_steroids_button.text = _format_cost(_get_bardo_steroids_cost())
 	knight_anabolizantes_button.text = _format_cost(_get_knight_anabolizantes_cost())
 	mage_row.visible = _is_mage_unlocked() or mage_count > 0
 	mage_steroids_row.visible = _is_mage_unlocked() or mage_steroids_count > 0
 	knight_row.visible = _is_knight_unlocked() or knight_count > 0
 	knight_steroids_row.visible = _is_knight_unlocked() or knight_steroids_count > 0
+	bardo_row.visible = true
+	bardo_steroids_row.visible = bardo_count > 0 or bardo_steroids_count > 0
 	double_fireball_row.visible = (_is_mage_unlocked() and mage_steroids_count >= 5) or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
@@ -814,6 +877,9 @@ func _get_mage_cost() -> int:
 func _get_knight_cost() -> int:
 	return int(BASE_KNIGHT_COST * pow(KNIGHT_COST_MULTIPLIER, knight_count))
 
+func _get_bardo_cost() -> int:
+	return int(BASE_BARDO_COST * pow(BARDO_COST_MULTIPLIER, bardo_count))
+
 func _get_pending_purchase_cost() -> int:
 	if pending_purchase == "nest":
 		return _get_nest_cost()
@@ -825,6 +891,8 @@ func _get_pending_purchase_cost() -> int:
 		return _get_mage_cost()
 	if pending_purchase == "knight":
 		return _get_knight_cost()
+	if pending_purchase == "bardo":
+		return _get_bardo_cost()
 	return 0
 
 func _get_click_upgrade_cost() -> int:
@@ -847,6 +915,9 @@ func _get_mage_steroids_cost() -> int:
 
 func _get_knight_steroids_cost() -> int:
 	return int(BASE_KNIGHT_STEROIDS_COST * pow(KNIGHT_STEROIDS_MULTIPLIER, knight_steroids_count))
+
+func _get_bardo_steroids_cost() -> int:
+	return int(BASE_BARDO_STEROIDS_COST * pow(BARDO_STEROIDS_MULTIPLIER, bardo_steroids_count))
 
 func _get_knight_anabolizantes_cost() -> int:
 	return int(BASE_KNIGHT_ANABOLIZANTES_COST * pow(KNIGHT_ANABOLIZANTES_MULTIPLIER, knight_anabolizantes_count))
@@ -872,6 +943,9 @@ func _update_knight_size() -> void:
 			knight.apply_size_multiplier(knight_size_multiplier)
 		else:
 			knight.scale = Vector2.ONE * knight_size_multiplier
+
+func get_bardo_spawn_bonus() -> float:
+	return 0.1 * (1 + bardo_steroids_count)
 
 func _is_mage_unlocked() -> bool:
 	return permanent_option_skills.get(wizard_hat_button, false)

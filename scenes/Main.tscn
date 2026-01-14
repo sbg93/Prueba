@@ -496,6 +496,36 @@ theme_override_styles/hover = SubResource("4")
 theme_override_styles/disabled = SubResource("6")
 text = "20"
 
+[node name="BardoRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
+layout_mode = 2
+
+[node name="BardoCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="BardoLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Despliega un bardo aliado que acelera el spawneo de los nidos cercanos."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Bardo"
+
+[node name="BardoBuyButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList/BardoRow"]
+layout_mode = 2
+tooltip_text = "Despliega un bardo aliado que acelera el spawneo de los nidos cercanos."
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "50"
+
 [node name="KnightRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/PurchasesList"]
 layout_mode = 2
 
@@ -702,6 +732,36 @@ text = "Esteroides de mago"
 [node name="MageSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/MageSteroidsRow"]
 layout_mode = 2
 tooltip_text = "Aumenta el alcance de los magos aliados en un 10%."
+theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("3")
+theme_override_styles/pressed = SubResource("5")
+theme_override_styles/hover = SubResource("4")
+theme_override_styles/disabled = SubResource("6")
+text = "20"
+
+[node name="BardoSteroidsRow" type="HBoxContainer" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList"]
+layout_mode = 2
+
+[node name="BardoSteroidsCountLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+
+[node name="BardoSteroidsLabel" type="Label" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Aumenta aún más la velocidad de spawneo que aportan los bardos."
+theme_override_colors/font_color = Color(0.88, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Esteroides de bardo"
+
+[node name="BardoSteroidsButton" type="Button" parent="HUD/UIRoot/Sidebar/SidebarContent/UpgradesList/BardoSteroidsRow"]
+layout_mode = 2
+tooltip_text = "Aumenta aún más la velocidad de spawneo que aportan los bardos."
 theme_override_colors/font_color = Color(0.97, 0.9, 0.63, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("3")
