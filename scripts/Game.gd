@@ -41,6 +41,8 @@ const BASE_SOLDIER_DAMAGE := 1
 const BASE_MAGE_DAMAGE := 3
 const BASE_MAGE_RANGE := 120.0
 const BASE_KNIGHT_SPEED := 220.0
+const BASE_BARDO_SPAWN_BONUS := 0.1
+const BARDO_STEROIDS_SPAWN_BONUS := 0.1
 const MAGE_RANGE_MULTIPLIER_PER_UPGRADE := 1.10
 const KNIGHT_SIZE_MULTIPLIER_PER_UPGRADE := 1.10
 const DELETE_SELECT_RADIUS := 26.0
@@ -945,7 +947,7 @@ func _update_knight_size() -> void:
 			knight.scale = Vector2.ONE * knight_size_multiplier
 
 func get_bardo_spawn_bonus() -> float:
-	return 0.1 * (1 + bardo_steroids_count)
+	return BASE_BARDO_SPAWN_BONUS + (BARDO_STEROIDS_SPAWN_BONUS * bardo_steroids_count)
 
 func _is_mage_unlocked() -> bool:
 	return permanent_option_skills.get(wizard_hat_button, false)
