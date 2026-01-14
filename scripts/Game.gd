@@ -844,7 +844,7 @@ func _update_ui() -> void:
 	knight_row.visible = _is_knight_unlocked() or knight_count > 0
 	knight_steroids_row.visible = _is_knight_unlocked() or knight_steroids_count > 0
 	bardo_row.visible = true
-	bardo_steroids_row.visible = bardo_count > 0 or bardo_steroids_count > 0
+	bardo_steroids_row.visible = true
 	double_fireball_row.visible = (_is_mage_unlocked() and mage_steroids_count >= 5) or double_fireball_purchased
 	double_fireball_button.disabled = double_fireball_purchased
 	double_fireball_button.text = "-" if double_fireball_purchased else _format_cost(BASE_DOUBLE_FIREBALL_COST)
