@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <rect width="16" height="16" fill="none"/>
+  <!-- hood -->
+  <rect x="6" y="1" width="4" height="1" fill="#3a1f5e"/>
+  <rect x="5" y="2" width="6" height="1" fill="#3a1f5e"/>
+  <rect x="5" y="3" width="6" height="1" fill="#4b2f70"/>
+  <!-- head -->
+  <rect x="6" y="4" width="4" height="2" fill="#d6b08a"/>
+  <rect x="6" y="6" width="4" height="1" fill="#b4835a"/>
+  <!-- robe -->
+  <rect x="6" y="7" width="4" height="1" fill="#5b338c"/>
+  <rect x="5" y="8" width="6" height="1" fill="#5b338c"/>
+  <rect x="5" y="9" width="6" height="2" fill="#5b338c"/>
+  <rect x="4" y="11" width="8" height="3" fill="#5b338c"/>
+  <rect x="4" y="14" width="8" height="1" fill="#4a2a73"/>
+  <!-- robe outline -->
+  <rect x="4" y="8" width="1" height="7" fill="#321a4f"/>
+  <rect x="12" y="8" width="1" height="7" fill="#321a4f"/>
+  <!-- arm -->
+  <rect x="10" y="8" width="2" height="1" fill="#c79c77"/>
+  <rect x="10" y="9" width="2" height="1" fill="#c79c77"/>
+  <!-- harp -->
+  <rect x="12" y="7" width="1" height="7" fill="#c9a24c"/>
+  <rect x="13" y="7" width="1" height="7" fill="#b4893b"/>
+  <rect x="12" y="7" width="3" height="1" fill="#c9a24c"/>
+  <rect x="12" y="13" width="3" height="1" fill="#b4893b"/>
+  <rect x="14" y="8" width="1" height="4" fill="#c9a24c"/>
+  <rect x="13" y="8" width="1" height="4" fill="#f2ddb0"/>
+  <rect x="12" y="8" width="1" height="4" fill="#f2ddb0"/>
+</svg>
