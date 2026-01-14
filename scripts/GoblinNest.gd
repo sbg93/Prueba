@@ -48,7 +48,7 @@ func _get_bardo_spawn_multiplier() -> float:
 	var total_bonus := 0.0
 	for bardo in get_tree().get_nodes_in_group("bardos"):
 		if bardo is Node2D:
-			var effect_range := bardo.effect_range if "effect_range" in bardo else 0.0
+			var effect_range : Variant = bardo.effect_range if "effect_range" in bardo else 0.0
 			if effect_range > 0.0 and global_position.distance_to(bardo.global_position) <= effect_range:
 				total_bonus += game.get_bardo_spawn_bonus()
 	return 1.0 + total_bonus
