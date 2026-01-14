@@ -745,7 +745,7 @@ func _update_ui() -> void:
 	skill_points_label.text = str(skill_points)
 	skill_progress_bar.max_value = skill_point_goal
 	skill_progress_bar.value = min(gold_since_last_skill_point, skill_point_goal)
-	skill_progress_bar.tooltip_text = "%d / %d" % [total_gold_earned, skill_point_goal]
+	skill_progress_bar.tooltip_text = "%d / %d" % [gold_since_last_skill_point, skill_point_goal]
 	rat_nest_count_label.text = str(nest_count)
 	goblin_nest_count_label.text = str(goblin_nest_count)
 	soldier_count_label.text = str(soldier_count)
